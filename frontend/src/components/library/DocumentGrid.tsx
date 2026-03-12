@@ -4,7 +4,8 @@ import { useLibraryStore } from "@/stores/library.store";
 import { DocumentCard } from "./DocumentCard";
 
 export function DocumentGrid() {
-  const { documents, loading } = useLibraryStore();
+  const { loading, getFilteredDocuments, documents } = useLibraryStore();
+  const filtered = getFilteredDocuments();
 
   if (loading) {
     return (
@@ -27,9 +28,17 @@ export function DocumentGrid() {
     );
   }
 
+  if (filtered.length === 0) {
+    return (
+      <div className="text-center py-12 text-muted-foreground">
+        No documents match your filters.
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      {documents.map((doc) => (
+      {filtered.map((doc) => (
         <DocumentCard key={doc.id} doc={doc} />
       ))}
     </div>

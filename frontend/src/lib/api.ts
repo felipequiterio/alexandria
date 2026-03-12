@@ -7,6 +7,8 @@ import type {
   ConversationResponse,
   Highlight,
   HighlightListResponse,
+  SearchResponse,
+  AgentEvent,
 } from "@alexandria/shared";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
@@ -62,12 +64,31 @@ export async function createConversation(
   return res.conversation;
 }
 
+export async function createLibraryConversation(
+  title?: string
+): Promise<Conversation> {
+  const res = await fetchApi<{ conversation: Conversation }>(
+    `/conversations`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    }
+  );
+  return res.conversation;
+}
+
 export async function listConversations(
   documentId: string
 ): Promise<Conversation[]> {
   const res = await fetchApi<ConversationListResponse>(
     `/documents/${documentId}/conversations`
   );
+  return res.conversations;
+}
+
+export async function listLibraryConversations(): Promise<Conversation[]> {
+  const res = await fetchApi<ConversationListResponse>(`/conversations`);
   return res.conversations;
 }
 
@@ -86,7 +107,7 @@ export async function* streamChatMessage(
     selectedText?: string;
     selectionLocation?: { page: number; start: number; end: number };
   }
-): AsyncGenerator<string, void, unknown> {
+): AsyncGenerator<AgentEvent, void, unknown> {
   const res = await fetch(`${API_BASE}/conversations/${conversationId}/messages`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -116,14 +137,40 @@ export async function* streamChatMessage(
     const lines = buffer.split("\n");
     buffer = lines.pop() || "";
 
+    let currentEvent = "";
     for (const line of lines) {
-      if (line.startsWith("data:")) {
+      if (line.startsWith("event:")) {
+        currentEvent = line.slice(6).trim();
+      } else if (line.startsWith("data:")) {
         const data = line.slice(5).trim();
         if (!data) continue;
         try {
           const parsed = JSON.parse(data);
-          if (parsed.content) {
-            yield parsed.content;
+          switch (currentEvent) {
+            case "delta":
+              yield { type: "delta", content: parsed.content };
+              break;
+            case "tool_start":
+              yield { type: "tool_start", toolName: parsed.toolName, args: parsed.args };
+              break;
+            case "tool_end":
+              yield { type: "tool_end", toolName: parsed.toolName, resultPreview: parsed.resultPreview };
+              break;
+            case "status":
+              yield { type: "status", message: parsed.message };
+              break;
+            case "done":
+              yield { type: "done", status: parsed.status, usage: parsed.usage };
+              break;
+            case "error":
+              yield { type: "error", error: parsed.error };
+              break;
+            default:
+              // Legacy fallback: treat as delta if it has content
+              if (parsed.content) {
+                yield { type: "delta", content: parsed.content };
+              }
+              break;
           }
         } catch {
           // Skip malformed JSON
@@ -131,6 +178,19 @@ export async function* streamChatMessage(
       }
     }
   }
+}
+
+// Search API
+
+export async function searchLibrary(
+  query: string,
+  options?: { mode?: "vector" | "text" | "hybrid"; documentId?: string; topK?: number }
+): Promise<SearchResponse> {
+  const params = new URLSearchParams({ q: query });
+  if (options?.mode) params.set("mode", options.mode);
+  if (options?.documentId) params.set("documentId", options.documentId);
+  if (options?.topK) params.set("topK", String(options.topK));
+  return fetchApi<SearchResponse>(`/search?${params}`);
 }
 
 // Highlights API
