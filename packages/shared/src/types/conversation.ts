@@ -24,3 +24,19 @@ export interface Message {
 export interface ConversationWithMessages extends Conversation {
   messages: Message[];
 }
+
+// Agent activity types for frontend display
+export interface AgentActivityItem {
+  toolName: string;
+  args?: Record<string, any>;
+  resultPreview?: string;
+  status: "running" | "completed";
+}
+
+export type AgentEvent =
+  | { type: "delta"; content: string }
+  | { type: "tool_start"; toolName: string; args: Record<string, any> }
+  | { type: "tool_end"; toolName: string; resultPreview: string }
+  | { type: "status"; message: string }
+  | { type: "done"; status: string; usage?: { prompt: number; completion: number } }
+  | { type: "error"; error: string };

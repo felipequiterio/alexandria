@@ -36,4 +36,12 @@ export interface SearchResult {
   pageNumber: number;
   score: number;
   sectionHeading: string | null;
+  documentId: string;
+  documentTitle?: string;
+}
+
+export interface SearchResponse {
+  results: SearchResult[];
+  total: number;
+  mode: "vector" | "text" | "hybrid";
 }
