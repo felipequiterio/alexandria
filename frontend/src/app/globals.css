@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --background: #E8DFD0;
+  --foreground: #2A1F1A;
+  --card: #F0E9DC;
+  --card-foreground: #2A1F1A;
+  --primary: #3D7A7A;
+  --primary-foreground: #F0E9DC;
+  --secondary: #5C3A28;
+  --secondary-foreground: #F0E9DC;
+  --accent: #C4943A;
+  --accent-foreground: #2A1F1A;
+  --muted: #7A6E62;
+  --muted-foreground: #7A6E62;
+  --border: #C4B8A8;
+  --destructive: #A05B4A;
+  --destructive-foreground: #F0E9DC;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --font-serif: var(--font-eb-garamond);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), Georgia, serif;
+}
