@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import type { Document } from "@alexandria/shared";
+import { useLibraryStore } from "@/stores/library.store";
 
 const typeColors: Record<string, string> = {
   paper: "border-l-primary",
@@ -13,13 +15,60 @@ const typeColors: Record<string, string> = {
 
 export function DocumentCard({ doc }: { doc: Document }) {
   const borderClass = typeColors[doc.type] || typeColors.other;
+  const remove = useLibraryStore((s) => s.remove);
+  const [confirming, setConfirming] = useState(false);
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!confirming) {
+      setConfirming(true);
+      return;
+    }
+
+    try {
+      await remove(doc.id);
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  const handleCancelDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setConfirming(false);
+  };
 
   return (
     <Link href={`/reader/${doc.id}`}>
       <div
-        className={`bg-card rounded-lg border border-border border-l-4 ${borderClass} p-5 hover:shadow-lg transition-shadow cursor-pointer group`}
+        className={`bg-card rounded-lg border border-border border-l-4 ${borderClass} p-5 hover:shadow-lg transition-shadow cursor-pointer group relative`}
       >
-        <h3 className="font-serif text-lg text-card-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+        <div className="absolute top-2 right-2 flex items-center gap-1">
+          {confirming && (
+            <button
+              onClick={handleCancelDelete}
+              className="text-xs px-1.5 py-0.5 rounded text-muted-foreground hover:text-foreground transition-colors"
+              title="Cancel"
+            >
+              Cancel
+            </button>
+          )}
+          <button
+            onClick={handleDelete}
+            className={`text-xs px-1.5 py-0.5 rounded transition-colors ${
+              confirming
+                ? "bg-destructive text-destructive-foreground"
+                : "text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100"
+            }`}
+            title={confirming ? "Confirm delete" : "Delete document"}
+          >
+            {confirming ? "Delete" : "\u00D7"}
+          </button>
+        </div>
+
+        <h3 className="font-serif text-lg text-card-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2 pr-6">
           {doc.title}
         </h3>
 

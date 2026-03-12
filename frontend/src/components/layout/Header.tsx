@@ -16,6 +16,12 @@ export function Header() {
           >
             Library
           </Link>
+          <Link
+            href="/settings"
+            className="hover:text-accent transition-colors"
+          >
+            Settings
+          </Link>
         </nav>
       </div>
     </header>

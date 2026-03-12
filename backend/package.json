@@ -9,8 +9,11 @@
   "dependencies": {
     "@alexandria/shared": "workspace:*",
     "@mariozechner/pi-ai": "^0.57.1",
+    "@sinclair/typebox": "^0.34.48",
+    "bullmq": "^5.71.0",
     "drizzle-orm": "^0.38",
     "hono": "^4.7",
+    "ioredis": "^5.10.0",
     "js-tiktoken": "^1.0.21",
     "openai": "^6.27.0",
     "pdf-parse": "^1.1",

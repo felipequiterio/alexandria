@@ -120,6 +120,45 @@ export const messages = pgTable("messages", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const familiarityLevelEnum = pgEnum("familiarity_level", [
+  "novice",
+  "beginner",
+  "intermediate",
+  "advanced",
+  "expert",
+]);
+
+export const conversationSummaries = pgTable("conversation_summaries", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  documentId: uuid("document_id").references(() => documents.id, { onDelete: "cascade" }),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  summary: text("summary").notNull(),
+  keyTopics: jsonb("key_topics").$type<string[]>().notNull().default([]),
+  keyInsights: jsonb("key_insights").$type<string[]>().notNull().default([]),
+  questionsAsked: jsonb("questions_asked").$type<string[]>().notNull().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const topicFamiliarity = pgTable("topic_familiarity", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  topic: text("topic").notNull(),
+  familiarityLevel: familiarityLevelEnum("familiarity_level").notNull().default("intermediate"),
+  confidence: integer("confidence").notNull().default(50),
+  evidenceDocumentIds: jsonb("evidence_document_ids").$type<string[]>().notNull().default([]),
+  evidenceConversationIds: jsonb("evidence_conversation_ids").$type<string[]>().notNull().default([]),
+  lastUpdated: timestamp("last_updated", { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const settings = pgTable("settings", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  key: varchar("key", { length: 255 }).notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const highlights = pgTable("highlights", {
   id: uuid("id").primaryKey().defaultRandom(),
   documentId: uuid("document_id")
