@@ -49,7 +49,7 @@ documentsRouter.get("/:id/file", async (c) => {
   const result = await getDocumentFile(c.req.param("id"));
   if (!result) return c.json({ error: "Document not found" }, 404);
 
-  return new Response(result.buffer, {
+  return new Response(new Uint8Array(result.buffer), {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `inline; filename="${result.filename}"`,
