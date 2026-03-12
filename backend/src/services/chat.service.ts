@@ -249,6 +249,12 @@ async function* streamSimplePath(opts: {
     contextText = results
       .map((r) => `[p.${r.pageNumber}] ${r.content}`)
       .join("\n\n---\n\n");
+
+    // Send source passages to frontend for inline highlighting
+    yield {
+      type: "sources" as const,
+      passages: results.map((r) => ({ content: r.content, pageNumber: r.pageNumber })),
+    };
   }
 
   // Build prompt with context

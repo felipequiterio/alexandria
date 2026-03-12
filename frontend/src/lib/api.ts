@@ -150,6 +150,9 @@ export async function* streamChatMessage(
             case "delta":
               yield { type: "delta", content: parsed.content };
               break;
+            case "sources":
+              yield { type: "sources", passages: parsed.passages };
+              break;
             case "tool_start":
               yield { type: "tool_start", toolName: parsed.toolName, args: parsed.args };
               break;

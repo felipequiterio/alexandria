@@ -87,6 +87,12 @@ chatRouter.post("/conversations/:id/messages", async (c) => {
               data: JSON.stringify({ content: event.content }),
             });
             break;
+          case "sources":
+            await stream.writeSSE({
+              event: "sources",
+              data: JSON.stringify({ passages: event.passages }),
+            });
+            break;
           case "tool_call_start":
             await stream.writeSSE({
               event: "tool_start",

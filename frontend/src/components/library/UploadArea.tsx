@@ -37,10 +37,10 @@ export function UploadArea() {
         setDragging(false);
         handleFiles(e.dataTransfer.files);
       }}
-      className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
+      className={`border border-dashed rounded-lg py-5 px-6 text-center cursor-pointer transition-all ${
         dragging
-          ? "border-primary bg-primary/10"
-          : "border-border hover:border-primary/50"
+          ? "border-accent bg-accent/8 shadow-[inset_0_0_20px_rgba(196,148,58,0.08)]"
+          : "border-border/60 hover:border-accent/40 hover:bg-card/50"
       }`}
     >
       <input
@@ -51,17 +51,31 @@ export function UploadArea() {
         id="file-upload"
         onChange={(e) => handleFiles(e.target.files)}
       />
-      <label htmlFor="file-upload" className="cursor-pointer">
+      <label htmlFor="file-upload" className="cursor-pointer flex items-center justify-center gap-3">
         {uploading ? (
-          <p className="text-muted-foreground">Uploading...</p>
+          <p className="text-muted-foreground font-serif text-sm">
+            Archiving scroll<span className="animate-pulse">...</span>
+          </p>
         ) : (
           <>
-            <p className="text-lg font-serif text-secondary mb-1">
-              Drop PDFs here or click to upload
-            </p>
-            <p className="text-sm text-muted-foreground">
-              PDF files only
-            </p>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-muted-foreground/50"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            <span className="text-sm text-muted-foreground">
+              <span className="font-serif text-secondary dark:text-foreground/70">Place a new scroll</span>
+              {" "}&mdash; drop a PDF or click to browse
+            </span>
           </>
         )}
       </label>

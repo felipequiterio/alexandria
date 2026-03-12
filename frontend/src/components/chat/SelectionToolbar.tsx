@@ -10,29 +10,48 @@ interface SelectionToolbarProps {
   onHighlight: () => void;
 }
 
-export function SelectionToolbar({ text, x, y, onHighlight }: SelectionToolbarProps) {
-  const { setSelection, open } = useChatStore();
+export function SelectionToolbar({
+  text,
+  x,
+  y,
+  onHighlight,
+}: SelectionToolbarProps) {
+  const setSelection = useChatStore((s) => s.setSelection);
   const page = useReaderStore((s) => s.page);
 
   const handleAskAtlas = () => {
     setSelection(text, { page, start: 0, end: text.length });
-    open();
   };
 
   return (
     <div
-      className="fixed z-50 flex gap-1 rounded-lg shadow-lg border border-border bg-card px-1 py-1"
-      style={{ left: x, top: y - 44 }}
+      className="fixed z-50 flex gap-0.5 rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] bg-card border border-border/40 p-1"
+      style={{ left: x, top: y - 46 }}
     >
       <button
         onClick={handleAskAtlas}
-        className="px-2.5 py-1 text-xs rounded hover:bg-primary/10 text-primary font-medium transition-colors"
+        className="px-3 py-1.5 text-xs rounded font-medium text-primary hover:bg-primary/10 flex items-center gap-1.5"
       >
+        <svg
+          width="11"
+          height="11"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+          <path d="M2 12h20" />
+        </svg>
         Ask Atlas
       </button>
+      <div className="w-px bg-border/40 my-1" />
       <button
         onClick={onHighlight}
-        className="px-2.5 py-1 text-xs rounded hover:bg-accent/10 text-accent font-medium transition-colors"
+        className="px-3 py-1.5 text-xs rounded font-medium text-accent hover:bg-accent/10"
       >
         Highlight
       </button>

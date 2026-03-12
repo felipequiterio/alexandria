@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Message, AgentActivityItem } from "@alexandria/shared";
+import type { Message, AgentActivityItem, SourcePassage } from "@alexandria/shared";
 import {
   createConversation as apiCreateConversation,
   createLibraryConversation as apiCreateLibraryConversation,
@@ -10,7 +10,6 @@ import {
 export type ChatScope = "passage" | "document" | "library";
 
 interface ChatState {
-  isOpen: boolean;
   conversationId: string | null;
   messages: Message[];
   isStreaming: boolean;
@@ -19,10 +18,9 @@ interface ChatState {
   selectionLocation: { page: number; start: number; end: number } | null;
   scope: ChatScope;
   agentActivity: AgentActivityItem[];
+  /** Source passages Atlas used for the current/last response — for PDF highlighting */
+  sourcePassages: SourcePassage[];
 
-  toggle: () => void;
-  open: () => void;
-  close: () => void;
   setSelection: (text: string | null, location?: { page: number; start: number; end: number } | null) => void;
   setScope: (scope: ChatScope) => void;
   createConversation: (documentId: string) => Promise<void>;
@@ -33,7 +31,6 @@ interface ChatState {
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
-  isOpen: false,
   conversationId: null,
   messages: [],
   isStreaming: false,
@@ -42,10 +39,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   selectionLocation: null,
   scope: "document",
   agentActivity: [],
-
-  toggle: () => set((s) => ({ isOpen: !s.isOpen })),
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
+  sourcePassages: [],
 
   setSelection: (text, location) =>
     set({ selectedText: text, selectionLocation: location ?? null }),
@@ -92,6 +86,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       selectedText: null,
       selectionLocation: null,
       agentActivity: [],
+      sourcePassages: [],
     }));
 
     try {
@@ -106,6 +101,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
           case "delta":
             fullContent += event.content;
             set({ streamingContent: fullContent });
+            break;
+          case "sources":
+            set({ sourcePassages: event.passages });
             break;
           case "tool_start":
             set((s) => ({
@@ -166,5 +164,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
       selectedText: null,
       selectionLocation: null,
       agentActivity: [],
+      sourcePassages: [],
     }),
 }));
