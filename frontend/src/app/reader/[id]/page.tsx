@@ -25,7 +25,7 @@ export default function ReaderPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-96 text-destructive">
+      <div className="flex items-center justify-center h-96 text-destructive font-serif">
         {error}
       </div>
     );
@@ -33,17 +33,18 @@ export default function ReaderPage() {
 
   if (!doc) {
     return (
-      <div className="flex items-center justify-center h-96 text-muted-foreground">
+      <div className="flex items-center justify-center h-96 text-muted-foreground font-serif">
         Loading document...
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3rem)]">
+    <div className="flex flex-col h-[calc(100vh-50px)]">
       <ReaderToolbar title={doc.title} />
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 overflow-auto relative">
+        {/* The scholar's desk — PDF reading surface */}
+        <div className="flex-1 overflow-auto bg-[#2A1F16] dark:bg-[#080A14]">
           <PdfViewer fileUrl={getDocumentFileUrl(doc.id)} documentId={doc.id} />
         </div>
         <ChatPanel documentId={doc.id} />
