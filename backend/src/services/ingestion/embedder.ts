@@ -2,8 +2,8 @@ import { eq, isNull, and } from "drizzle-orm";
 import { db } from "../../db";
 import { documentChunks } from "../../db/schema";
 import { getOpenAIClient } from "../ai/provider";
+import { env } from "../../lib/env";
 
-const EMBEDDING_MODEL = "openai/text-embedding-3-small";
 const BATCH_SIZE = 100;
 
 export async function embedChunks(documentId: string): Promise<void> {
@@ -26,7 +26,7 @@ export async function embedChunks(documentId: string): Promise<void> {
     const texts = batch.map((c) => c.content);
 
     const response = await openai.embeddings.create({
-      model: EMBEDDING_MODEL,
+      model: env.AI_EMBEDDING_MODEL,
       input: texts,
     });
 

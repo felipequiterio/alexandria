@@ -2,9 +2,8 @@ import { sql, eq, and } from "drizzle-orm";
 import { db } from "../../db";
 import { documentChunks, documentSections } from "../../db/schema";
 import { getOpenAIClient } from "../ai/provider";
+import { env } from "../../lib/env";
 import type { SearchResult } from "@alexandria/shared";
-
-const EMBEDDING_MODEL = "openai/text-embedding-3-small";
 
 interface SearchOptions {
   documentId?: string;
@@ -22,7 +21,7 @@ export async function searchDocumentChunks(
 
   // Embed the query
   const response = await openai.embeddings.create({
-    model: EMBEDDING_MODEL,
+    model: env.AI_EMBEDDING_MODEL,
     input: query,
   });
   const queryEmbedding = response.data[0].embedding;

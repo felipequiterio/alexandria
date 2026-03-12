@@ -7,6 +7,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3001),
   OPENROUTER_API_KEY: z.string().optional(),
   AI_CHAT_MODEL: z.string().default("google/gemini-2.5-flash"),
+  AI_EMBEDDING_MODEL: z.string().default("openai/text-embedding-3-small"),
 });
 
 export const env = envSchema.parse(process.env);
