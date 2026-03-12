@@ -1,6 +1,6 @@
 import { sql, eq, and } from "drizzle-orm";
 import { db } from "../../db";
-import { documentChunks, documentSections } from "../../db/schema";
+import { documentChunks, documentSections, documents } from "../../db/schema";
 import { getOpenAIClient } from "../ai/provider";
 import { env } from "../../lib/env";
 import type { SearchResult } from "@alexandria/shared";
@@ -11,23 +11,24 @@ interface SearchOptions {
   threshold?: number;
 }
 
+export async function embedQuery(query: string): Promise<number[]> {
+  const openai = getOpenAIClient();
+  const response = await openai.embeddings.create({
+    model: env.AI_EMBEDDING_MODEL,
+    input: query,
+  });
+  return response.data[0].embedding;
+}
+
 export async function searchDocumentChunks(
   query: string,
   options: SearchOptions = {}
 ): Promise<SearchResult[]> {
   const { documentId, topK = 5, threshold = 0.3 } = options;
 
-  const openai = getOpenAIClient();
-
-  // Embed the query
-  const response = await openai.embeddings.create({
-    model: env.AI_EMBEDDING_MODEL,
-    input: query,
-  });
-  const queryEmbedding = response.data[0].embedding;
+  const queryEmbedding = await embedQuery(query);
   const embeddingStr = `[${queryEmbedding.join(",")}]`;
 
-  // Build the query with cosine similarity
   const conditions = [
     sql`${documentChunks.embedding} IS NOT NULL`,
   ];
@@ -43,9 +44,12 @@ export async function searchDocumentChunks(
       pageNumber: documentChunks.pageNumber,
       score: sql<number>`1 - (${documentChunks.embedding} <=> ${embeddingStr}::vector)`.as("score"),
       sectionHeading: documentSections.heading,
+      documentId: documentChunks.documentId,
+      documentTitle: documents.title,
     })
     .from(documentChunks)
     .leftJoin(documentSections, eq(documentChunks.sectionId, documentSections.id))
+    .innerJoin(documents, eq(documentChunks.documentId, documents.id))
     .where(and(...conditions))
     .orderBy(sql`${documentChunks.embedding} <=> ${embeddingStr}::vector`)
     .limit(topK);
@@ -58,5 +62,7 @@ export async function searchDocumentChunks(
       pageNumber: r.pageNumber,
       score: r.score,
       sectionHeading: r.sectionHeading,
+      documentId: r.documentId,
+      documentTitle: r.documentTitle,
     }));
 }
