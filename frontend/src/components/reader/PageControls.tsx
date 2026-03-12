@@ -25,7 +25,7 @@ export function PageControls() {
           max={totalPages || undefined}
           value={page}
           onChange={(e) => setPage(Number(e.target.value))}
-          className="w-10 text-center rounded border border-border/50 bg-card px-1 py-0.5 text-xs"
+          className="w-10 text-center rounded border border-border/50 bg-input-bg px-1 py-0.5 text-xs"
         />
         <span className="text-muted-foreground/60">/</span>
         <span className="text-muted-foreground/60">{totalPages || "?"}</span>

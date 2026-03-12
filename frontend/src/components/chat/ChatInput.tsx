@@ -48,7 +48,7 @@ export function ChatInput() {
             selectedText ? "Ask about this passage..." : "Ask Atlas..."
           }
           disabled={isStreaming}
-          className="flex-1 rounded border border-border/60 bg-background px-3 py-2 text-sm font-serif focus:outline-none focus:ring-1 focus:ring-primary/50 disabled:opacity-40 placeholder:text-muted-foreground/40"
+          className="flex-1 rounded border border-border/60 bg-input-bg px-3 py-2 text-sm font-serif focus:outline-none focus:ring-1 focus:ring-primary/50 disabled:opacity-40 placeholder:text-muted-foreground/40"
         />
         <button
           type="submit"

@@ -8,7 +8,7 @@ function ThemeSelector() {
 
   const options = [
     { value: "light" as const, label: "The Archive", sublabel: "Light" },
-    { value: "dark" as const, label: "The Observatory", sublabel: "Dark" },
+    { value: "dark" as const, label: "The Archive at Night", sublabel: "Dark" },
     { value: "system" as const, label: "System", sublabel: "Auto" },
   ];
 
@@ -59,10 +59,19 @@ export default function SettingsPage() {
   };
 
   const inputClass =
-    "w-full rounded border border-border/60 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50";
+    "w-full rounded border border-border/60 bg-input-bg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50";
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8">
+      <a
+        href="/"
+        className="inline-flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 mb-6"
+      >
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Back to workspace
+      </a>
       <h2 className="text-3xl font-serif text-secondary dark:text-foreground mb-1">
         Settings
       </h2>

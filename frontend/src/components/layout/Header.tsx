@@ -16,21 +16,21 @@ function ThemeToggle() {
   return (
     <button
       onClick={cycle}
-      className="p-1.5 rounded text-[#F0E9DC]/60 hover:text-[#F0E9DC] dark:text-[#E4DDD0]/50 dark:hover:text-[#D4A847]"
+      className="p-1.5 rounded text-muted-foreground hover:text-foreground"
       title={`Theme: ${theme}`}
     >
       {theme === "dark" ? (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       ) : theme === "system" ? (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <rect x="2" y="3" width="20" height="14" rx="2" />
           <line x1="8" y1="21" x2="16" y2="21" />
           <line x1="12" y1="17" x2="12" y2="21" />
         </svg>
       ) : (
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -56,51 +56,49 @@ export function Header() {
   ];
 
   return (
-    <header className="relative z-50">
-      {/* Torchlight gold accent line */}
-      <div className="h-[2px] bg-[#C4943A]" />
+    <header className="relative z-50 shrink-0">
+      {/* Slim toolbar bar */}
+      <nav className="bg-toolbar-bg h-10 flex items-center justify-between px-6">
+        <Link href="/library">
+          <span className="font-serif text-[1.1rem] tracking-[0.18em] font-medium uppercase text-foreground">
+            Alexandria
+          </span>
+        </Link>
 
-      {/* Teal frieze band (light) / Observatory band (dark) */}
-      <nav className="bg-[#3D7A7A] dark:bg-[#0F1225] dark:border-b dark:border-[#2A2E45]/60 shadow-[inset_0_-2px_6px_rgba(0,0,0,0.08)]">
-        <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between">
-          <Link href="/library">
-            <span className="font-serif text-[1.35rem] tracking-[0.2em] font-medium uppercase text-[#F0E9DC] dark:text-[#D4A847]">
-              Alexandria
-            </span>
-          </Link>
-
-          <div className="flex items-center gap-7">
-            {navItems.map((item) => {
-              const isActive = pathname?.startsWith(item.href);
-              if (item.disabled) {
-                return (
-                  <span
-                    key={item.href}
-                    className="uppercase text-[11px] tracking-[0.15em] font-medium text-[#F0E9DC]/25 dark:text-[#8A8599]/30 cursor-not-allowed"
-                  >
-                    {item.label}
-                  </span>
-                );
-              }
+        <div className="flex items-center gap-6">
+          {navItems.map((item) => {
+            const isActive = pathname?.startsWith(item.href);
+            if (item.disabled) {
               return (
-                <Link
+                <span
                   key={item.href}
-                  href={item.href}
-                  className={`uppercase text-[11px] tracking-[0.15em] font-medium pb-0.5 ${
-                    isActive
-                      ? "text-[#C4943A] border-b-2 border-[#C4943A]"
-                      : "text-[#F0E9DC]/70 dark:text-[#E4DDD0]/55 hover:text-[#F0E9DC] dark:hover:text-[#E4DDD0]"
-                  }`}
+                  className="uppercase text-[10px] tracking-[0.12em] font-medium text-muted-foreground/30 cursor-not-allowed"
                 >
                   {item.label}
-                </Link>
+                </span>
               );
-            })}
-            <div className="w-px h-4 bg-[#F0E9DC]/15 dark:bg-[#2A2E45]" />
-            <ThemeToggle />
-          </div>
+            }
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`uppercase text-[10px] tracking-[0.12em] font-medium pb-0.5 ${
+                  isActive
+                    ? "text-accent border-b border-accent"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          <div className="w-px h-3.5 bg-border" />
+          <ThemeToggle />
         </div>
       </nav>
+
+      {/* Thin frieze accent line */}
+      <div className="h-[1.5px] bg-primary/60" />
     </header>
   );
 }

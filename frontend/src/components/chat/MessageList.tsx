@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useChatStore } from "@/stores/chat.store";
 import { ChatMessage } from "./ChatMessage";
-import { SourcePill } from "./SourcePill";
+import { MarkdownContent } from "./MarkdownContent";
 import { AgentActivityLog } from "./AgentActivityLog";
 
 export function MessageList() {
@@ -58,19 +58,13 @@ export function MessageList() {
       {/* Streaming response */}
       {isStreaming && (
         <div className="flex justify-start">
-          <div className="max-w-[88%] rounded-lg px-3.5 py-2.5 text-sm bg-background border border-border/50">
+          <div className="max-w-[88%] rounded-lg px-3.5 py-2.5 text-sm bg-card border border-border/50">
             {agentActivity.length > 0 && (
               <AgentActivityLog activities={agentActivity} />
             )}
             {streamingContent ? (
-              <div className="whitespace-pre-wrap leading-relaxed font-serif text-card-foreground">
-                {streamingContent.split(/\[p\.(\d+)\]/g).map((part, i) =>
-                  i % 2 === 1 ? (
-                    <SourcePill key={i} page={parseInt(part, 10)} />
-                  ) : (
-                    <span key={i}>{part}</span>
-                  )
-                )}
+              <div className="text-card-foreground">
+                <MarkdownContent content={streamingContent} />
                 <span className="inline-block w-[2px] h-[14px] bg-primary/50 animate-pulse ml-0.5 align-text-bottom" />
               </div>
             ) : (

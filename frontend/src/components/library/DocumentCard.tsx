@@ -6,11 +6,11 @@ import type { Document } from "@alexandria/shared";
 import { useLibraryStore } from "@/stores/library.store";
 
 const RIBBON_BG: Record<string, string> = {
-  paper: "bg-[#3D7A7A] dark:bg-[#5AA0A0]",
-  book: "bg-[#C4943A] dark:bg-[#D4A847]",
-  article: "bg-[#A05B4A] dark:bg-[#C06858]",
-  note: "bg-[#7A6E62] dark:bg-[#8A8599]",
-  other: "bg-[#5C3A28] dark:bg-[#7B9BBF]",
+  paper: "bg-[#3D7A7A] dark:bg-[#4A8585]",
+  book: "bg-[#C4943A] dark:bg-[#C4943A]",
+  article: "bg-[#A05B4A] dark:bg-[#B86858]",
+  note: "bg-[#7A6E62] dark:bg-[#8B7E6E]",
+  other: "bg-[#5C3A28] dark:bg-[#8B6A50]",
 };
 
 export function DocumentCard({ doc }: { doc: Document }) {

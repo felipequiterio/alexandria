@@ -1,20 +1,10 @@
 "use client";
 
 import type { Message } from "@alexandria/shared";
-import { SourcePill } from "./SourcePill";
+import { MarkdownContent } from "./MarkdownContent";
 
 interface ChatMessageProps {
   message: Message;
-}
-
-function renderContent(content: string) {
-  const parts = content.split(/\[p\.(\d+)\]/g);
-  return parts.map((part, i) => {
-    if (i % 2 === 1) {
-      return <SourcePill key={i} page={parseInt(part, 10)} />;
-    }
-    return <span key={i}>{part}</span>;
-  });
 }
 
 export function ChatMessage({ message }: ChatMessageProps) {
@@ -25,8 +15,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div
         className={`max-w-[82%] rounded-lg px-3.5 py-2.5 text-sm ${
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-background text-card-foreground border border-border/50"
+            ? "bg-primary text-primary-foreground dark:bg-accent/20 dark:text-foreground"
+            : "bg-card text-card-foreground border border-border/50"
         }`}
       >
         {/* Quoted passage context */}
@@ -42,12 +32,14 @@ export function ChatMessage({ message }: ChatMessageProps) {
           </div>
         )}
 
-        {/* Message content — Atlas uses serif */}
-        <div
-          className={`whitespace-pre-wrap leading-relaxed ${!isUser ? "font-serif" : ""}`}
-        >
-          {renderContent(message.content)}
-        </div>
+        {/* Message content */}
+        {isUser ? (
+          <div className="whitespace-pre-wrap leading-relaxed">
+            {message.content}
+          </div>
+        ) : (
+          <MarkdownContent content={message.content} />
+        )}
       </div>
     </div>
   );

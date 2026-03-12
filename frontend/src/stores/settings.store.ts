@@ -12,6 +12,7 @@ interface SettingsState {
   fetch: () => Promise<void>;
   update: (updates: Record<string, string>) => Promise<void>;
   setTheme: (theme: Theme) => void;
+  hydrateTheme: () => void;
 }
 
 function applyTheme(theme: Theme) {
@@ -28,9 +29,7 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
   settings: {},
   loading: false,
   error: null,
-  theme: (typeof window !== "undefined"
-    ? (localStorage.getItem("alexandria-theme") as Theme) || "light"
-    : "light") as Theme,
+  theme: "light" as Theme,
 
   fetch: async () => {
     set({ loading: true, error: null });
@@ -61,5 +60,13 @@ export const useSettingsStore = create<SettingsState>((set, get) => ({
     localStorage.setItem("alexandria-theme", theme);
     applyTheme(theme);
     set({ theme });
+  },
+
+  hydrateTheme: () => {
+    const stored = localStorage.getItem("alexandria-theme") as Theme | null;
+    if (stored) {
+      applyTheme(stored);
+      set({ theme: stored });
+    }
   },
 }));

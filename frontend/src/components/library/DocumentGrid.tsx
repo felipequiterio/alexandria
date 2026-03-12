@@ -11,7 +11,7 @@ export function DocumentGrid() {
     return (
       <div className="cabinet">
         <div className="cabinet-frieze">
-          <span className="text-primary-foreground dark:text-[#D4A847]/80 text-xs font-medium tracking-wider uppercase">
+          <span className="text-primary-foreground dark:text-accent/80 text-xs font-medium tracking-wider uppercase">
             Collection
           </span>
         </div>
@@ -26,7 +26,7 @@ export function DocumentGrid() {
     return (
       <div className="cabinet">
         <div className="cabinet-frieze">
-          <span className="text-primary-foreground dark:text-[#D4A847]/80 text-xs font-medium tracking-wider uppercase">
+          <span className="text-primary-foreground dark:text-accent/80 text-xs font-medium tracking-wider uppercase">
             Collection
           </span>
         </div>
@@ -52,7 +52,7 @@ export function DocumentGrid() {
     return (
       <div className="cabinet">
         <div className="cabinet-frieze">
-          <span className="text-primary-foreground dark:text-[#D4A847]/80 text-xs font-medium tracking-wider uppercase">
+          <span className="text-primary-foreground dark:text-accent/80 text-xs font-medium tracking-wider uppercase">
             0 scrolls
           </span>
         </div>
@@ -66,7 +66,7 @@ export function DocumentGrid() {
   return (
     <div className="cabinet">
       <div className="cabinet-frieze flex items-center justify-between">
-        <span className="text-primary-foreground dark:text-[#D4A847]/80 text-xs font-medium tracking-wider uppercase">
+        <span className="text-primary-foreground dark:text-accent/80 text-xs font-medium tracking-wider uppercase">
           {filtered.length} scroll{filtered.length !== 1 ? "s" : ""}
         </span>
       </div>

@@ -5,18 +5,15 @@ import { listHighlights, deleteHighlight as apiDeleteHighlight, updateHighlight 
 interface HighlightState {
   highlights: Highlight[];
   loading: boolean;
-  sidebarOpen: boolean;
 
   fetch: (documentId: string) => Promise<void>;
   remove: (id: string) => Promise<void>;
   update: (id: string, data: { color?: string; note?: string }) => Promise<void>;
-  toggleSidebar: () => void;
 }
 
 export const useHighlightStore = create<HighlightState>((set, get) => ({
   highlights: [],
   loading: false,
-  sidebarOpen: false,
 
   fetch: async (documentId) => {
     set({ loading: true });
@@ -39,6 +36,4 @@ export const useHighlightStore = create<HighlightState>((set, get) => ({
       highlights: s.highlights.map((h) => (h.id === id ? updated : h)),
     }));
   },
-
-  toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
 }));

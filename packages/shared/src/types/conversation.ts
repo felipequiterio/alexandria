@@ -33,8 +33,15 @@ export interface AgentActivityItem {
   status: "running" | "completed";
 }
 
+/** A passage retrieved by RAG that Atlas used to answer. */
+export interface SourcePassage {
+  content: string;
+  pageNumber: number;
+}
+
 export type AgentEvent =
   | { type: "delta"; content: string }
+  | { type: "sources"; passages: SourcePassage[] }
   | { type: "tool_start"; toolName: string; args: Record<string, any> }
   | { type: "tool_end"; toolName: string; resultPreview: string }
   | { type: "status"; message: string }

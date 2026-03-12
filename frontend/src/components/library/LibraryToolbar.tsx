@@ -15,7 +15,7 @@ export function LibraryToolbar() {
   } = useLibraryStore();
 
   const selectClass =
-    "rounded border border-border/60 bg-card px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary/50 text-foreground appearance-none cursor-pointer";
+    "rounded border border-border/60 bg-input-bg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary/50 text-foreground appearance-none cursor-pointer";
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -40,7 +40,7 @@ export function LibraryToolbar() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search the archive..."
-          className="w-full rounded border border-border/60 bg-card pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground/50"
+          className="w-full rounded border border-border/60 bg-input-bg pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground/50"
         />
       </div>
 

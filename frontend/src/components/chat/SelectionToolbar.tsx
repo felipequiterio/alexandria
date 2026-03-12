@@ -16,12 +16,11 @@ export function SelectionToolbar({
   y,
   onHighlight,
 }: SelectionToolbarProps) {
-  const { setSelection, open } = useChatStore();
+  const setSelection = useChatStore((s) => s.setSelection);
   const page = useReaderStore((s) => s.page);
 
   const handleAskAtlas = () => {
     setSelection(text, { page, start: 0, end: text.length });
-    open();
   };
 
   return (

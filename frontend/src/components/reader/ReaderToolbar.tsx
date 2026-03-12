@@ -2,15 +2,10 @@
 
 import Link from "next/link";
 import { PageControls } from "./PageControls";
-import { useChatStore } from "@/stores/chat.store";
-import { useHighlightStore } from "@/stores/highlight.store";
 
 export function ReaderToolbar({ title }: { title: string }) {
-  const { isOpen: chatOpen, toggle: toggleChat } = useChatStore();
-  const { sidebarOpen, toggleSidebar } = useHighlightStore();
-
   return (
-    <div className="bg-card border-b border-primary/30 px-4 py-2 flex items-center justify-between sticky top-0 z-10">
+    <div className="bg-toolbar-bg border-b border-border px-4 h-10 flex items-center justify-between shrink-0">
       <div className="flex items-center gap-3 min-w-0">
         <Link
           href="/library"
@@ -21,36 +16,13 @@ export function ReaderToolbar({ title }: { title: string }) {
           </svg>
           Library
         </Link>
-        <div className="w-px h-4 bg-border/50" />
+        <div className="w-px h-3.5 bg-border" />
         <h2 className="font-serif text-sm text-foreground line-clamp-1 min-w-0">
           {title}
         </h2>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
-        <PageControls />
-        <div className="w-px h-4 bg-border/40 mx-1" />
-        <button
-          onClick={toggleSidebar}
-          className={`px-2.5 py-1 text-xs rounded border font-medium ${
-            sidebarOpen
-              ? "bg-accent/15 text-accent border-accent/30"
-              : "border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
-          }`}
-        >
-          Highlights
-        </button>
-        <button
-          onClick={toggleChat}
-          className={`px-2.5 py-1 text-xs rounded border font-medium ${
-            chatOpen
-              ? "bg-primary/15 text-primary border-primary/30"
-              : "border-border/50 text-muted-foreground hover:text-foreground hover:border-border"
-          }`}
-        >
-          Atlas
-        </button>
-      </div>
+      <PageControls />
     </div>
   );
 }
