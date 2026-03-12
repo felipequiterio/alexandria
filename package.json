@@ -1,0 +1,14 @@
+{
+  "name": "alexandria",
+  "private": true,
+  "workspaces": ["frontend", "backend", "packages/*"],
+  "scripts": {
+    "dev": "bun run dev:backend & bun run dev:frontend",
+    "dev:frontend": "cd frontend && bun run dev",
+    "dev:backend": "cd backend && bun run dev",
+    "db:push": "cd backend && bunx drizzle-kit push",
+    "db:studio": "cd backend && bunx drizzle-kit studio",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  }
+}

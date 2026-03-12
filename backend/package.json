@@ -1,0 +1,21 @@
+{
+  "name": "@alexandria/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch run src/index.ts"
+  },
+  "dependencies": {
+    "@alexandria/shared": "workspace:*",
+    "drizzle-orm": "^0.38",
+    "hono": "^4.7",
+    "pdf-parse": "^1.1",
+    "postgres": "^3.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/pdf-parse": "^1.1",
+    "drizzle-kit": "^0.30"
+  }
+}
