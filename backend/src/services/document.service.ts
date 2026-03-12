@@ -1,8 +1,10 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
-import { documents } from "../db/schema";
+import { documents, documentChunks } from "../db/schema";
 import { storeFile, getFilePath, deleteFile, readFileBuffer } from "./storage.service";
 import { parsePdf } from "./pdf-parser.service";
+import { chunkDocument } from "./ingestion/chunker";
+import { embedChunks } from "./ingestion/embedder";
 import type { Document } from "@alexandria/shared";
 
 function hashFile(buffer: ArrayBuffer): string {
@@ -72,13 +74,49 @@ export async function uploadDocument(file: File): Promise<Document> {
       mimeType: file.type || "application/pdf",
       pageCount: parsed.pageCount,
       rawText: parsed.text,
-      processingStatus: "completed",
-      processedAt: new Date(),
+      processingStatus: "processing",
       metadata: parsed.metadata as Record<string, unknown>,
     })
     .returning();
 
+  // Chunk and embed in the background (don't block upload response)
+  chunkAndEmbed(row.id, parsed.text, parsed.pageCount).catch((err) => {
+    console.error(`Chunking/embedding failed for document ${row.id}:`, err);
+  });
+
   return rowToDocument(row);
+}
+
+async function chunkAndEmbed(documentId: string, rawText: string, pageCount: number): Promise<void> {
+  try {
+    const chunks = chunkDocument(rawText, pageCount);
+
+    if (chunks.length > 0) {
+      await db.insert(documentChunks).values(
+        chunks.map((c) => ({
+          documentId,
+          content: c.content,
+          chunkIndex: c.chunkIndex,
+          pageNumber: c.pageNumber,
+          tokenCount: c.tokenCount,
+        }))
+      );
+
+      // Embed chunks (updates rows in-place)
+      await embedChunks(documentId);
+    }
+
+    await db
+      .update(documents)
+      .set({ processingStatus: "completed", processedAt: new Date() })
+      .where(eq(documents.id, documentId));
+  } catch (err) {
+    await db
+      .update(documents)
+      .set({ processingStatus: "failed" })
+      .where(eq(documents.id, documentId));
+    throw err;
+  }
 }
 
 export async function listDocuments(): Promise<Document[]> {
