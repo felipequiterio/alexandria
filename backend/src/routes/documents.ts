@@ -91,15 +91,19 @@ documentsRouter.post("/:id/reprocess", async (c) => {
 
 // Serve PDF file
 documentsRouter.get("/:id/file", async (c) => {
-  const result = await getDocumentFile(c.req.param("id"));
-  if (!result) return c.json({ error: "Document not found" }, 404);
+  try {
+    const result = await getDocumentFile(c.req.param("id"));
+    if (!result) return c.json({ error: "Document not found" }, 404);
 
-  return new Response(new Uint8Array(result.buffer), {
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `inline; filename="${result.filename}"`,
-    },
-  });
+    return new Response(new Uint8Array(result.buffer), {
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `inline; filename="${result.filename}"`,
+      },
+    });
+  } catch {
+    return c.json({ error: "PDF file not found on disk" }, 404);
+  }
 });
 
 // Delete document
