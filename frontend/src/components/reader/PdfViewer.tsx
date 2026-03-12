@@ -56,7 +56,6 @@ export function PdfViewer({ fileUrl, documentId }: PdfViewerProps) {
     };
 
     const handleMouseDown = (e: MouseEvent) => {
-      // Clear selection when clicking outside the toolbar
       const target = e.target as HTMLElement;
       if (!target.closest("[data-selection-toolbar]")) {
         setSelection(null);
@@ -94,16 +93,20 @@ export function PdfViewer({ fileUrl, documentId }: PdfViewerProps) {
   return (
     <div
       ref={containerRef}
-      className="flex justify-center py-6 overflow-auto bg-secondary/5 min-h-[calc(100vh-8rem)]"
+      className="flex justify-center py-8 min-h-full"
     >
       <Document
         file={fileUrl}
         onLoadSuccess={onDocumentLoadSuccess}
         loading={
-          <div className="text-muted-foreground py-20">Loading PDF...</div>
+          <div className="text-[#C4B8A8] py-20 font-serif text-lg">
+            Loading manuscript...
+          </div>
         }
         error={
-          <div className="text-destructive py-20">Failed to load PDF.</div>
+          <div className="text-destructive py-20 font-serif">
+            Failed to load manuscript.
+          </div>
         }
       >
         <Page
@@ -111,7 +114,7 @@ export function PdfViewer({ fileUrl, documentId }: PdfViewerProps) {
           scale={scale}
           renderTextLayer={true}
           renderAnnotationLayer={true}
-          className="shadow-lg"
+          className="shadow-[0_4px_32px_rgba(0,0,0,0.3),0_1px_8px_rgba(0,0,0,0.2)]"
         />
       </Document>
 

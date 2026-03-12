@@ -8,11 +8,9 @@ interface ChatMessageProps {
 }
 
 function renderContent(content: string) {
-  // Split on [p.N] references and render them as SourcePills
   const parts = content.split(/\[p\.(\d+)\]/g);
   return parts.map((part, i) => {
     if (i % 2 === 1) {
-      // This is a page number captured by the regex group
       return <SourcePill key={i} page={parseInt(part, 10)} />;
     }
     return <span key={i}>{part}</span>;
@@ -23,20 +21,31 @@ export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.role === "user";
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"} mb-3`}>
+    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
+        className={`max-w-[82%] rounded-lg px-3.5 py-2.5 text-sm ${
           isUser
             ? "bg-primary text-primary-foreground"
-            : "bg-card text-card-foreground border border-border"
+            : "bg-background text-card-foreground border border-border/50"
         }`}
       >
+        {/* Quoted passage context */}
         {message.selectedText && (
-          <div className="mb-2 px-2 py-1 rounded bg-accent/15 text-xs italic border-l-2 border-accent">
-            &ldquo;{message.selectedText}&rdquo;
+          <div className="mb-2.5 px-2.5 py-1.5 rounded bg-accent/8 text-xs italic border-l-2 border-accent/60">
+            <span className="text-accent/40 text-[10px] not-italic">
+              &ldquo;
+            </span>
+            <span className="text-foreground/60">{message.selectedText}</span>
+            <span className="text-accent/40 text-[10px] not-italic">
+              &rdquo;
+            </span>
           </div>
         )}
-        <div className={`whitespace-pre-wrap leading-relaxed ${!isUser ? "font-serif" : ""}`}>
+
+        {/* Message content — Atlas uses serif */}
+        <div
+          className={`whitespace-pre-wrap leading-relaxed ${!isUser ? "font-serif" : ""}`}
+        >
           {renderContent(message.content)}
         </div>
       </div>

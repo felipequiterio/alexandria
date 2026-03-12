@@ -12,7 +12,7 @@ export function SourcePill({ page }: SourcePillProps) {
   return (
     <button
       onClick={() => setPage(page)}
-      className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium rounded bg-primary/15 text-primary hover:bg-primary/25 transition-colors cursor-pointer"
+      className="inline-flex items-center px-1.5 py-0 text-[11px] font-sans font-medium rounded bg-primary/10 text-primary hover:bg-primary/18 cursor-pointer mx-0.5 align-baseline"
     >
       p.{page}
     </button>
