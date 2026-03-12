@@ -290,7 +290,20 @@ export function PdfViewer({ fileUrl, documentId }: PdfViewerProps) {
 
   const handleHighlight = async () => {
     if (!selection) return;
-    const currentPage = useReaderStore.getState().page;
+
+    // Determine page from the selection's DOM context (more reliable than scroll tracker)
+    let currentPage = useReaderStore.getState().page;
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      const anchor = sel.getRangeAt(0).startContainer;
+      const pageWrapper =
+        (anchor as HTMLElement).closest?.("[data-page-number]") ||
+        anchor.parentElement?.closest("[data-page-number]");
+      if (pageWrapper) {
+        const pn = Number(pageWrapper.getAttribute("data-page-number"));
+        if (pn > 0) currentPage = pn;
+      }
+    }
 
     try {
       await createHighlight({

@@ -14,6 +14,7 @@ const MAX_STEPS = 8;
 
 export type AgentEvent =
   | { type: "text_delta"; content: string }
+  | { type: "sources"; passages: { content: string; pageNumber: number }[] }
   | { type: "tool_call_start"; toolName: string; args: Record<string, any> }
   | { type: "tool_call_end"; toolName: string; result: string }
   | { type: "status"; message: string }

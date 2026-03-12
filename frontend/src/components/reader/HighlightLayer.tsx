@@ -1,140 +1,123 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useHighlightStore } from "@/stores/highlight.store";
 import { useChatStore } from "@/stores/chat.store";
 
 /** User highlight colors — warm, book-highlighter feel */
 const USER_COLORS: Record<string, string> = {
-  gold: "rgba(250, 204, 50, 0.35)",
-  teal: "rgba(61, 180, 180, 0.30)",
-  terracotta: "rgba(210, 110, 80, 0.30)",
-  green: "rgba(80, 180, 80, 0.28)",
+  gold: "rgba(250, 204, 50, 0.38)",
+  teal: "rgba(61, 180, 180, 0.32)",
+  terracotta: "rgba(210, 110, 80, 0.32)",
+  green: "rgba(80, 180, 80, 0.30)",
 };
 
-/** Atlas source reference — cool blue */
-const SOURCE_COLOR = "rgba(90, 150, 240, 0.28)";
+const SOURCE_COLOR = "rgba(90, 150, 240, 0.30)";
 
 interface HighlightLayerProps {
-  /** The VirtualPage wrapper that contains .react-pdf__Page */
   pageElement: HTMLElement | null;
   pageNumber: number;
   documentId: string;
 }
 
-/**
- * Finds all occurrences of `snippet` inside the react-pdf text layer
- * and returns DOMRects relative to `anchorEl` (the .react-pdf__Page div).
- */
-function findTextRects(
-  textLayer: HTMLElement,
-  snippet: string,
-  anchorEl: HTMLElement
-): DOMRect[] {
-  if (!snippet || snippet.length < 4) return [];
+/** Normalize text for fuzzy matching across PDF quirks */
+function norm(s: string): string {
+  return s
+    .replace(/[\u00A0\u200B\u200C\u200D\u200E\u200F\uFEFF\u00AD\u2028\u2029]/g, " ")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
 
-  const needle = snippet.replace(/\s+/g, " ").trim().toLowerCase();
-  if (!needle) return [];
+/** Pre-built haystack for a page's text layer */
+interface PageHay {
+  hay: string;
+  map: number[];
+}
 
-  const spans = textLayer.querySelectorAll<HTMLSpanElement>("span");
-  if (spans.length === 0) return [];
-
-  // Build char-to-node index. Each entry maps a character position in the
-  // concatenated full text to its DOM Text node + offset within that node.
-  type CharInfo = { node: Text; offset: number };
-  const charMap: CharInfo[] = [];
-  let fullText = "";
-
-  for (const span of spans) {
-    // Walk the span's child nodes — react-pdf puts raw text nodes inside spans
-    const walker = document.createTreeWalker(span, NodeFilter.SHOW_TEXT);
-    let textNode: Text | null;
-    while ((textNode = walker.nextNode() as Text | null)) {
-      const t = textNode.textContent || "";
-      for (let i = 0; i < t.length; i++) {
-        charMap.push({ node: textNode, offset: i });
-      }
-      fullText += t;
+function buildHaystack(spans: HTMLElement[]): PageHay {
+  const texts = spans.map((s) => norm(s.textContent || ""));
+  let hay = "";
+  const map: number[] = [];
+  for (let si = 0; si < texts.length; si++) {
+    for (const ch of texts[si]) {
+      map.push(si);
+      hay += ch;
     }
-    // Logical space between spans (PDF words/lines are separate spans)
-    fullText += " ";
-    // Map this space to the last char of the previous node (safe fallback)
-    if (charMap.length > 0) {
-      const last = charMap[charMap.length - 1];
-      charMap.push({ node: last.node, offset: last.offset });
+    if (si < texts.length - 1) {
+      map.push(-1);
+      hay += " ";
     }
   }
+  return { hay, map };
+}
 
-  const haystack = fullText.toLowerCase();
-  const anchorRect = anchorEl.getBoundingClientRect();
-  const rects: DOMRect[] = [];
-
+/**
+ * Returns indices of spans that overlap with `needle` in the haystack.
+ */
+function searchHay(ph: PageHay, needle: string): Set<number> {
+  if (!needle || needle.length < 3) return new Set();
+  const hit = new Set<number>();
   let from = 0;
-  while (from < haystack.length) {
-    const idx = haystack.indexOf(needle, from);
+  while (from < ph.hay.length) {
+    const idx = ph.hay.indexOf(needle, from);
     if (idx === -1) break;
-
-    const endIdx = idx + needle.length - 1;
-    const sc = charMap[idx];
-    const ec = charMap[Math.min(endIdx, charMap.length - 1)];
-
-    if (sc && ec) {
-      try {
-        const range = document.createRange();
-        range.setStart(sc.node, sc.offset);
-        range.setEnd(
-          ec.node,
-          Math.min(ec.offset + 1, ec.node.textContent?.length ?? ec.offset + 1)
-        );
-
-        for (const cr of range.getClientRects()) {
-          // Skip degenerate rects
-          if (cr.width < 1 || cr.height < 1) continue;
-          rects.push(
-            new DOMRect(
-              cr.left - anchorRect.left,
-              cr.top - anchorRect.top,
-              cr.width,
-              cr.height
-            )
-          );
-        }
-      } catch {
-        // Range can fail for unusual DOM structures — skip
-      }
+    for (let c = idx; c < idx + needle.length && c < ph.map.length; c++) {
+      if (ph.map[c] >= 0) hit.add(ph.map[c]);
     }
     from = idx + 1;
   }
+  return hit;
+}
 
-  return rects;
+/** Match a user highlight (exact text the user selected) */
+function matchSpans(ph: PageHay, snippet: string): Set<number> {
+  return searchHay(ph, norm(snippet));
 }
 
 /**
- * Creates a highlight mark element styled like a real book highlighter.
+ * Match a RAG source passage against the page text.
+ * Tries progressively shorter prefixes and individual sentences
+ * to handle differences between backend PDF parser and react-pdf text layer.
  */
-function createMark(r: DOMRect, color: string, title: string): HTMLDivElement {
-  const el = document.createElement("div");
-  el.style.cssText = `
-    position: absolute;
-    left: ${r.x}px;
-    top: ${r.y + r.height * 0.15}px;
-    width: ${r.width}px;
-    height: ${r.height * 0.75}px;
-    background: ${color};
-    border-radius: 1px;
-    pointer-events: none;
-    mix-blend-mode: multiply;
-  `;
-  el.title = title;
-  return el;
+function matchSourcePassage(ph: PageHay, content: string): Set<number> {
+  const full = norm(content);
+
+  // Try progressively shorter prefixes
+  for (const len of [300, 150, 80]) {
+    if (full.length < len) continue;
+    const result = searchHay(ph, full.slice(0, len));
+    if (result.size > 0) return result;
+  }
+
+  // Try the full content if short enough
+  if (full.length > 0 && full.length <= 300) {
+    const result = searchHay(ph, full);
+    if (result.size > 0) return result;
+  }
+
+  // Fallback: match individual sentences (first 3)
+  const sentences = content
+    .split(/[.!?]+/)
+    .map((s) => norm(s))
+    .filter((s) => s.length > 15);
+  const combined = new Set<number>();
+  for (const sentence of sentences.slice(0, 3)) {
+    for (const si of searchHay(ph, sentence)) {
+      combined.add(si);
+    }
+  }
+  return combined;
 }
 
 /**
- * Injects highlight overlays directly into the .react-pdf__Page element
- * so they share the same coordinate space as the text layer.
+ * Directly styles react-pdf text layer <span> elements to look like
+ * book-highlighter marks. No overlay div, no positioning math.
  *
- * - User highlights: warm colors (gold, teal, terracotta, green)
- * - Atlas source passages: blue
+ * Returns null — all work is done as a DOM side-effect.
  */
 export function HighlightLayer({
   pageElement,
@@ -142,86 +125,93 @@ export function HighlightLayer({
 }: HighlightLayerProps) {
   const highlights = useHighlightStore((s) => s.highlights);
   const sourcePassages = useChatStore((s) => s.sourcePassages);
-  const overlayId = useRef(`hl-overlay-${pageNumber}`);
+  const styledRef = useRef<Set<HTMLElement>>(new Set());
 
-  const pageHighlights = highlights.filter((h) => h.pageNumber === pageNumber);
-  const pageSources = sourcePassages.filter((s) => s.pageNumber === pageNumber);
-
-  const paint = useCallback(() => {
-    if (!pageElement) return;
-
-    // Find the .react-pdf__Page div (which has position: relative)
-    const pageDiv = pageElement.querySelector<HTMLElement>(".react-pdf__Page");
-    if (!pageDiv) return;
-
-    const textLayer = pageDiv.querySelector<HTMLElement>(
-      ".react-pdf__Page__textContent"
-    );
-    if (!textLayer) return;
-
-    // Remove previous overlay if it exists
-    const existing = pageDiv.querySelector(`#${overlayId.current}`);
-    if (existing) existing.remove();
-
-    if (pageHighlights.length === 0 && pageSources.length === 0) return;
-
-    // Create overlay container inside the page div
-    const overlay = document.createElement("div");
-    overlay.id = overlayId.current;
-    overlay.style.cssText =
-      "position:absolute;inset:0;pointer-events:none;z-index:3;";
-    pageDiv.appendChild(overlay);
-
-    // Paint user highlights
-    for (const h of pageHighlights) {
-      const color = USER_COLORS[h.color] || USER_COLORS.gold;
-      const rects = findTextRects(textLayer, h.content, pageDiv);
-      for (const r of rects) {
-        overlay.appendChild(
-          createMark(r, color, h.content.slice(0, 80))
-        );
-      }
-    }
-
-    // Paint Atlas source passages
-    for (const src of pageSources) {
-      // Match the first 300 chars of the chunk (chunks can be very long)
-      const snippet = src.content.slice(0, 300);
-      const rects = findTextRects(textLayer, snippet, pageDiv);
-      for (const r of rects) {
-        overlay.appendChild(
-          createMark(r, SOURCE_COLOR, "Atlas source")
-        );
-      }
-    }
-  }, [pageElement, pageHighlights, pageSources]);
+  const pageHighlights = useMemo(
+    () => highlights.filter((h) => h.pageNumber === pageNumber),
+    [highlights, pageNumber]
+  );
+  const pageSources = useMemo(
+    () => sourcePassages.filter((s) => s.pageNumber === pageNumber),
+    [sourcePassages, pageNumber]
+  );
 
   useEffect(() => {
     if (!pageElement) return;
 
-    // MutationObserver: react-pdf renders the text layer asynchronously.
-    // We repaint whenever the subtree changes (text layer populates).
+    // ── Clear previous styles ──
+    const clearOld = () => {
+      for (const span of styledRef.current) {
+        if (span.isConnected) {
+          span.style.backgroundColor = "";
+          span.style.mixBlendMode = "";
+          span.style.borderRadius = "";
+        }
+      }
+      styledRef.current.clear();
+    };
+
+    if (pageHighlights.length === 0 && pageSources.length === 0) {
+      clearOld();
+      return;
+    }
+
+    // ── Apply highlight styles to matching spans ──
+    const apply = (): boolean => {
+      const textLayer =
+        pageElement.querySelector<HTMLElement>(".react-pdf__Page__textContent") ||
+        pageElement.querySelector<HTMLElement>(".textLayer");
+      if (!textLayer) return false;
+
+      const spans = Array.from(textLayer.querySelectorAll<HTMLElement>("span"));
+      if (spans.length === 0) return false;
+
+      clearOld();
+
+      const ph = buildHaystack(spans);
+
+      // User highlights — warm colors
+      for (const h of pageHighlights) {
+        const color = USER_COLORS[h.color] || USER_COLORS.gold;
+        for (const si of matchSpans(ph, h.content)) {
+          spans[si].style.backgroundColor = color;
+          spans[si].style.mixBlendMode = "multiply";
+          spans[si].style.borderRadius = "2px";
+          styledRef.current.add(spans[si]);
+        }
+      }
+
+      // Atlas source passages — blue
+      for (const src of pageSources) {
+        for (const si of matchSourcePassage(ph, src.content)) {
+          spans[si].style.backgroundColor = SOURCE_COLOR;
+          spans[si].style.mixBlendMode = "multiply";
+          spans[si].style.borderRadius = "2px";
+          styledRef.current.add(spans[si]);
+        }
+      }
+
+      return true;
+    };
+
+    // Try immediately
+    apply();
+
+    // react-pdf renders the text layer async — watch for childList changes.
+    // Style changes (attributes) do NOT trigger childList observers, so no loop.
     let debounce: ReturnType<typeof setTimeout>;
     const observer = new MutationObserver(() => {
       clearTimeout(debounce);
-      debounce = setTimeout(paint, 50);
+      debounce = setTimeout(apply, 60);
     });
     observer.observe(pageElement, { childList: true, subtree: true });
-
-    // Initial paint (text layer may already be present)
-    const timer = setTimeout(paint, 150);
 
     return () => {
       observer.disconnect();
       clearTimeout(debounce);
-      clearTimeout(timer);
-      // Clean up overlay on unmount
-      const pageDiv = pageElement.querySelector<HTMLElement>(".react-pdf__Page");
-      const existing = pageDiv?.querySelector(`#${overlayId.current}`);
-      if (existing) existing.remove();
+      clearOld();
     };
-  }, [pageElement, paint]);
+  }, [pageElement, pageHighlights, pageSources]);
 
-  // This component injects into the DOM imperatively — no React output needed
   return null;
 }

@@ -23,6 +23,8 @@ interface ChatState {
 
   setSelection: (text: string | null, location?: { page: number; start: number; end: number } | null) => void;
   setScope: (scope: ChatScope) => void;
+  removeSourcePassage: (index: number) => void;
+  clearSourcePassages: () => void;
   createConversation: (documentId: string) => Promise<void>;
   createLibraryConversation: () => Promise<void>;
   loadConversation: (conversationId: string) => Promise<void>;
@@ -45,6 +47,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
     set({ selectedText: text, selectionLocation: location ?? null }),
 
   setScope: (scope) => set({ scope }),
+
+  removeSourcePassage: (index) =>
+    set((s) => ({
+      sourcePassages: s.sourcePassages.filter((_, i) => i !== index),
+    })),
+
+  clearSourcePassages: () => set({ sourcePassages: [] }),
 
   createConversation: async (documentId: string) => {
     const conv = await apiCreateConversation(documentId);
