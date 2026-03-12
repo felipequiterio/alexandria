@@ -84,3 +84,52 @@ export const documentChunks = pgTable("document_chunks", {
   embedding: vector("embedding", { dimensions: 1536 }),
   metadata: jsonb("metadata").$type<Record<string, unknown>>().notNull().default({}),
 });
+
+export const messageRoleEnum = pgEnum("message_role", [
+  "user",
+  "assistant",
+]);
+
+export const highlightColorEnum = pgEnum("highlight_color", [
+  "teal",
+  "gold",
+  "terracotta",
+  "green",
+]);
+
+export const conversations = pgTable("conversations", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  documentId: uuid("document_id").references(() => documents.id, { onDelete: "cascade" }),
+  title: text("title").notNull().default("New conversation"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const messages = pgTable("messages", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id, { onDelete: "cascade" }),
+  role: messageRoleEnum("role").notNull(),
+  content: text("content").notNull(),
+  selectedText: text("selected_text"),
+  selectionLocation: jsonb("selection_location").$type<{ page: number; start: number; end: number } | null>(),
+  contextChunkIds: jsonb("context_chunk_ids").$type<string[]>().notNull().default([]),
+  modelUsed: text("model_used"),
+  tokenUsage: jsonb("token_usage").$type<{ prompt: number; completion: number } | null>(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const highlights = pgTable("highlights", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  documentId: uuid("document_id")
+    .notNull()
+    .references(() => documents.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  pageNumber: integer("page_number").notNull(),
+  positionStart: integer("position_start").notNull(),
+  positionEnd: integer("position_end").notNull(),
+  color: highlightColorEnum("color").notNull().default("teal"),
+  note: text("note"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
