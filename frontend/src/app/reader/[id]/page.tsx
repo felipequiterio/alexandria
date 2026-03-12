@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { getDocument, getDocumentFileUrl } from "@/lib/api";
 import { ReaderToolbar } from "@/components/reader/ReaderToolbar";
+import { ChatPanel } from "@/components/chat/ChatPanel";
+import { HighlightSidebar } from "@/components/reader/HighlightSidebar";
 import type { Document } from "@alexandria/shared";
 
 const PdfViewer = dynamic(
@@ -40,7 +42,13 @@ export default function ReaderPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-3rem)]">
       <ReaderToolbar title={doc.title} />
-      <PdfViewer fileUrl={getDocumentFileUrl(doc.id)} />
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 overflow-auto relative">
+          <PdfViewer fileUrl={getDocumentFileUrl(doc.id)} documentId={doc.id} />
+        </div>
+        <ChatPanel documentId={doc.id} />
+        <HighlightSidebar />
+      </div>
     </div>
   );
 }
