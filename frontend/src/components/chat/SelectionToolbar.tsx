@@ -25,7 +25,7 @@ export function SelectionToolbar({
 
   return (
     <div
-      className="fixed z-50 flex gap-0.5 rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] bg-card border border-border/40 p-1"
+      className="fixed z-50 flex gap-0.5 rounded-sm shadow-sm bg-card border border-border/40 p-1"
       style={{ left: x, top: y - 46 }}
     >
       <button

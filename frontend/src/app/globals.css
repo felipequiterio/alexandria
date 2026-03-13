@@ -1,76 +1,75 @@
 @import "tailwindcss";
 
 /* =================================================================
-   ALEXANDRIA DESIGN SYSTEM
-   The Archive (light) · The Archive at Night (dark)
+   ALEXANDRIA DESIGN SYSTEM — Minimal Scenic Interface
    ================================================================= */
 
-/* --- The Archive: Light Mode --- */
+/* --- Light Mode --- */
 :root {
-  --background: #EAE2D4;
-  --foreground: #2A1F1A;
-  --card: #F0E9DC;
-  --card-foreground: #2A1F1A;
-  --primary: #3D7A7A;
-  --primary-foreground: #F5F0E5;
-  --secondary: #5C3A28;
-  --secondary-foreground: #F0E9DC;
-  --accent: #C4943A;
-  --accent-foreground: #2A1F1A;
-  --muted: #7A6E62;
-  --muted-foreground: #7A6E62;
-  --border: #C4B8A8;
-  --destructive: #A05B4A;
-  --destructive-foreground: #F5F0E5;
-  --success: #5A7A5A;
-  --surface-desk: #3A2518;
+  --background:          #F5F5F5;
+  --foreground:          #1A1A1A;
+  --card:                #FFFFFF;
+  --card-foreground:     #1A1A1A;
+  --primary:             #3B3B3B;
+  --primary-foreground:  #FFFFFF;
+  --secondary:           #6B6B6B;
+  --secondary-foreground:#FFFFFF;
+  --accent:              #4A7A8A;
+  --accent-foreground:   #FFFFFF;
+  --muted:               #999999;
+  --muted-foreground:    #888888;
+  --border:              #E0E0E0;
+  --destructive:         #D94444;
+  --destructive-foreground: #FFFFFF;
+  --success:             #3D8A3D;
+  --surface-desk:        #1A1A1A;
 
   /* Semantic surface variables */
-  --panel-bg: #EDE6D8;
-  --input-bg: #F5F0E5;
-  --toolbar-bg: #E4DBCC;
-  --reader-bg: #2A1F16;
+  --panel-bg:            rgba(255,255,255,0.88);
+  --input-bg:            rgba(255,255,255,0.95);
+  --toolbar-bg:          rgba(245,245,245,0.92);
+  --reader-bg:           #1A1A1A;
 
   /* Layout tokens */
   --topbar-height: 52px;
   --archive-width: 320px;
   --workspace-max-width: 1480px;
-  --panel-gap: 10px;
-  --panel-radius: 12px;
+  --panel-gap: 8px;
+  --panel-radius: 2px;
 }
 
-/* --- The Archive at Night: Dark Mode --- */
+/* --- Dark Mode --- */
 .dark {
-  --background: #1A1512;
-  --foreground: #E4DDD0;
-  --card: #231C17;
-  --card-foreground: #E4DDD0;
-  --primary: #4A8585;
-  --primary-foreground: #E4DDD0;
-  --secondary: #8B6A50;
-  --secondary-foreground: #E4DDD0;
-  --accent: #C4943A;
-  --accent-foreground: #1A1512;
-  --muted: #7A6E62;
-  --muted-foreground: #8A7E72;
-  --border: #342A22;
-  --destructive: #C06050;
-  --destructive-foreground: #E4DDD0;
-  --success: #6A9A6A;
-  --surface-desk: #151210;
+  --background:          #121212;
+  --foreground:          #E0E0E0;
+  --card:                #1E1E1E;
+  --card-foreground:     #E0E0E0;
+  --primary:             #C0C0C0;
+  --primary-foreground:  #1A1A1A;
+  --secondary:           #888888;
+  --secondary-foreground:#E0E0E0;
+  --accent:              #6BA0B0;
+  --accent-foreground:   #FFFFFF;
+  --muted:               #999999;
+  --muted-foreground:    #888888;
+  --border:              #2A2A2A;
+  --destructive:         #E05555;
+  --destructive-foreground: #FFFFFF;
+  --success:             #5AAA5A;
+  --surface-desk:        #1A1A1A;
 
   /* Semantic surface variables */
-  --panel-bg: #1E1814;
-  --input-bg: #2A2219;
-  --toolbar-bg: #1E1814;
-  --reader-bg: #151210;
+  --panel-bg:            rgba(30,30,30,0.88);
+  --input-bg:            rgba(40,40,40,0.95);
+  --toolbar-bg:          rgba(24,24,24,0.92);
+  --reader-bg:           #141414;
 
-  /* Layout tokens (same values, inherited) */
+  /* Layout tokens */
   --topbar-height: 52px;
   --archive-width: 320px;
   --workspace-max-width: 1480px;
-  --panel-gap: 10px;
-  --panel-radius: 12px;
+  --panel-gap: 8px;
+  --panel-radius: 2px;
 }
 
 @theme inline {
@@ -95,7 +94,6 @@
   --color-input-bg: var(--input-bg);
   --color-toolbar-bg: var(--toolbar-bg);
   --color-reader-bg: var(--reader-bg);
-  --font-serif: var(--font-eb-garamond);
   --font-sans: var(--font-inter);
   --topbar-height: var(--topbar-height);
   --archive-width: var(--archive-width);
@@ -114,33 +112,11 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Mosaic floor hint — faint diamond tile across the entire viewport */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%235C3A28' stroke-width='0.5'/%3E%3C/svg%3E");
-  background-size: 60px 60px;
-}
-.dark body::before {
-  opacity: 0.015;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%238B6A50' stroke-width='0.3'/%3E%3C/svg%3E");
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
 ::selection {
-  background: rgba(61, 122, 122, 0.25);
+  background: rgba(0, 0, 0, 0.12);
 }
 .dark ::selection {
-  background: rgba(196, 148, 58, 0.25);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 a, button, input, select, textarea {
@@ -165,152 +141,17 @@ a, button, input, select, textarea {
 ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
 /* =================================================================
-   SCROLL CARD — the document-as-scroll metaphor
+   DOCUMENT CARD — minimal flat card
    ================================================================= */
 
-.scroll-card {
-  position: relative;
-  background:
-    linear-gradient(90deg,
-      rgba(140, 100, 70, 0.06) 0%,
-      transparent 5%,
-      transparent 95%,
-      rgba(140, 100, 70, 0.06) 100%),
-    linear-gradient(180deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      transparent 50%),
-    var(--card);
-  border-radius: 4px;
+.doc-card {
+  background: var(--card);
   border: 1px solid var(--border);
-  box-shadow:
-    inset 3px 0 6px -3px rgba(90, 58, 40, 0.08),
-    inset -3px 0 6px -3px rgba(90, 58, 40, 0.08),
-    0 1px 3px rgba(90, 58, 40, 0.06),
-    0 2px 8px rgba(90, 58, 40, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.25s ease;
-  overflow: hidden;
+  border-radius: var(--panel-radius);
+  transition: border-color 0.15s ease;
 }
-
-.scroll-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    inset 3px 0 6px -3px rgba(90, 58, 40, 0.08),
-    inset -3px 0 6px -3px rgba(90, 58, 40, 0.08),
-    0 0 0 1px rgba(196, 148, 58, 0.12),
-    0 4px 24px rgba(196, 148, 58, 0.18),
-    0 2px 8px rgba(90, 58, 40, 0.1);
-}
-
-.dark .scroll-card {
-  background:
-    linear-gradient(90deg,
-      rgba(139, 106, 80, 0.04) 0%,
-      transparent 5%,
-      transparent 95%,
-      rgba(139, 106, 80, 0.04) 100%),
-    linear-gradient(180deg,
-      rgba(196, 148, 58, 0.02) 0%,
-      transparent 50%),
-    var(--card);
-  border-color: var(--border);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.dark .scroll-card:hover {
-  box-shadow:
-    0 0 0 1px rgba(196, 148, 58, 0.18),
-    0 4px 24px rgba(196, 148, 58, 0.1),
-    0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* Processing shimmer on scroll cards */
-.scroll-shimmer::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(196, 148, 58, 0.08) 45%,
-    rgba(196, 148, 58, 0.14) 50%,
-    rgba(196, 148, 58, 0.08) 55%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2.5s ease-in-out infinite;
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-/* Ribbon — the colored seal/mark on each scroll */
-.scroll-ribbon {
-  position: absolute;
-  top: 0;
-  right: 16px;
-  width: 20px;
-  height: 32px;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 82%, 0 100%);
-  z-index: 2;
-  opacity: 0.85;
-}
-
-/* =================================================================
-   CABINET — the mahogany frame for the scroll grid
-   ================================================================= */
-
-.cabinet {
-  position: relative;
-  background: var(--secondary);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.15),
-    0 2px 12px rgba(90, 58, 40, 0.1);
-}
-
-/* Diamond-lattice overlay */
-.cabinet::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 0L32 16L16 32L0 16Z' fill='none' stroke='%23F0E9DC' stroke-width='0.5'/%3E%3C/svg%3E");
-  background-size: 32px 32px;
-}
-
-.dark .cabinet {
-  background: #2A2019;
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, 0.3),
-    0 2px 12px rgba(0, 0, 0, 0.2);
-}
-.dark .cabinet::before {
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M16 0L32 16L16 32L0 16Z' fill='none' stroke='%238B6A50' stroke-width='0.3'/%3E%3C/svg%3E");
-}
-
-/* Teal frieze band atop the cabinet */
-.cabinet-frieze {
-  background: var(--primary);
-  padding: 0.5rem 1.25rem;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-.dark .cabinet-frieze {
-  background: rgba(196, 148, 58, 0.08);
-  border-bottom: 1px solid rgba(196, 148, 58, 0.12);
-}
-
-/* Cabinet interior where scrolls sit */
-.cabinet-interior {
-  position: relative;
-  z-index: 2;
-  padding: 1.25rem;
+.doc-card:hover {
+  border-color: var(--muted);
 }
 
 /* =================================================================
@@ -334,15 +175,14 @@ a, button, input, select, textarea {
   color: var(--foreground);
 }
 .right-panel-tab[data-active="true"] {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
+  color: var(--foreground);
+  border-bottom-color: var(--foreground);
 }
 
 /* =================================================================
    ATLAS CHAT
    ================================================================= */
 
-/* Atlas flame (thinking indicator) */
 .atlas-flame {
   display: inline-block;
   animation: flame 1.5s ease-in-out infinite;
@@ -388,7 +228,7 @@ a, button, input, select, textarea {
    LAYOUT — AppShell, Archive, Workspace
    ================================================================= */
 
-/* Resizable panel separators (react-resizable-panels v4) */
+/* Resizable panel separators */
 [data-group] > [data-separator] {
   width: 6px;
   background: transparent;
@@ -399,12 +239,12 @@ a, button, input, select, textarea {
 }
 [data-group] > [data-separator]:hover,
 [data-group] > [data-separator][data-state="dragging"] {
-  background: var(--primary);
-  opacity: 0.3;
+  background: var(--foreground);
+  opacity: 0.15;
   border-radius: 3px;
 }
 
-/* Archive sidebar inner content — keeps layout stable during animation */
+/* Archive sidebar inner content */
 .archive-inner {
   min-width: var(--archive-width);
   width: var(--archive-width);
@@ -412,11 +252,13 @@ a, button, input, select, textarea {
   overflow: hidden;
 }
 
-/* Workspace panel styling */
+/* Workspace panel styling — frosted glass */
 .workspace-panel {
   border-radius: var(--panel-radius);
   border: 1px solid var(--border);
   background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   overflow: hidden;
   display: flex;
   flex-direction: column;

@@ -56,11 +56,10 @@ export function Header() {
   ];
 
   return (
-    <header className="relative z-50 shrink-0">
-      {/* Slim toolbar bar */}
-      <nav className="bg-toolbar-bg h-10 flex items-center justify-between px-6">
+    <header className="relative z-50 shrink-0 border-b border-border">
+      <nav className="bg-toolbar-bg backdrop-blur-sm h-10 flex items-center justify-between px-6">
         <Link href="/library">
-          <span className="font-serif text-[1.1rem] tracking-[0.18em] font-medium uppercase text-foreground">
+          <span className="font-sans font-medium text-[1.1rem] tracking-[0.12em] uppercase text-foreground">
             Alexandria
           </span>
         </Link>
@@ -84,7 +83,7 @@ export function Header() {
                 href={item.href}
                 className={`uppercase text-[10px] tracking-[0.12em] font-medium pb-0.5 ${
                   isActive
-                    ? "text-accent border-b border-accent"
+                    ? "text-foreground border-b border-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -96,9 +95,6 @@ export function Header() {
           <ThemeToggle />
         </div>
       </nav>
-
-      {/* Thin frieze accent line */}
-      <div className="h-[1.5px] bg-primary/60" />
     </header>
   );
 }

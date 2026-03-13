@@ -77,19 +77,19 @@ export function HighlightsRail() {
       <div className="flex-1 overflow-y-auto px-2 py-2">
         {!selectedDocumentId ? (
           <div className="text-center mt-12 px-3">
-            <p className="text-muted-foreground/40 text-xs font-serif italic">
+            <p className="text-muted-foreground/40 text-xs">
               Highlights from your reading will appear here.
             </p>
           </div>
         ) : !hasContent ? (
           <div className="text-center mt-12 px-3">
-            <p className="text-muted-foreground/40 text-xs font-serif italic">
-              Select text in the document to illuminate passages.
+            <p className="text-muted-foreground/40 text-xs">
+              Select text in the document to highlight passages.
             </p>
           </div>
         ) : (
           <>
-            {/* ── User highlights ── */}
+            {/* User highlights */}
             {pages.map((pageNum) => (
               <div key={pageNum} className="mb-3">
                 <div className="text-[10px] text-muted-foreground/50 uppercase tracking-wider mb-1 px-1 font-medium">
@@ -98,12 +98,12 @@ export function HighlightsRail() {
                 {grouped[pageNum].map((h) => (
                   <div
                     key={h.id}
-                    className={`mb-1.5 p-2 rounded text-xs border-l-2 bg-card/80 cursor-pointer hover:bg-card ${
+                    className={`mb-1.5 p-2 rounded-sm text-xs border-l-2 bg-card/80 cursor-pointer hover:bg-card ${
                       BORDER_LEFT[h.color] || BORDER_LEFT.teal
                     }`}
                     onClick={() => setPage(h.pageNumber)}
                   >
-                    <p className="line-clamp-2 text-foreground/70 italic font-serif text-[11px] leading-relaxed">
+                    <p className="line-clamp-2 text-foreground/70 italic text-[11px] leading-relaxed">
                       &ldquo;{h.content}&rdquo;
                     </p>
                     {h.note && (
@@ -141,7 +141,7 @@ export function HighlightsRail() {
               </div>
             ))}
 
-            {/* ── Atlas source passages ── */}
+            {/* Atlas source passages */}
             {sourcePassages.length > 0 && (
               <div className="mt-1">
                 <div className="flex items-center justify-between mb-1.5 px-1">
@@ -163,10 +163,10 @@ export function HighlightsRail() {
                     {sourcesByPage[pageNum].map((src) => (
                       <div
                         key={`src-${src.originalIndex}`}
-                        className="mb-1.5 p-2 rounded text-xs border-l-2 border-l-blue-400/40 bg-blue-500/5 cursor-pointer hover:bg-blue-500/10"
+                        className="mb-1.5 p-2 rounded-sm text-xs border-l-2 border-l-blue-400/40 bg-blue-500/5 cursor-pointer hover:bg-blue-500/10"
                         onClick={() => setPage(pageNum)}
                       >
-                        <p className="line-clamp-3 text-foreground/60 italic font-serif text-[11px] leading-relaxed">
+                        <p className="line-clamp-3 text-foreground/60 italic text-[11px] leading-relaxed">
                           &ldquo;{src.content.slice(0, 150)}
                           {src.content.length > 150 ? "..." : ""}&rdquo;
                         </p>

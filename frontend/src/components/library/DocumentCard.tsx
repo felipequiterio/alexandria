@@ -5,14 +5,6 @@ import Link from "next/link";
 import type { Document } from "@alexandria/shared";
 import { useLibraryStore } from "@/stores/library.store";
 
-const RIBBON_BG: Record<string, string> = {
-  paper: "bg-[#3D7A7A] dark:bg-[#4A8585]",
-  book: "bg-[#C4943A] dark:bg-[#C4943A]",
-  article: "bg-[#A05B4A] dark:bg-[#B86858]",
-  note: "bg-[#7A6E62] dark:bg-[#8B7E6E]",
-  other: "bg-[#5C3A28] dark:bg-[#8B6A50]",
-};
-
 export function DocumentCard({ doc }: { doc: Document }) {
   const remove = useLibraryStore((s) => s.remove);
   const [confirming, setConfirming] = useState(false);
@@ -41,26 +33,21 @@ export function DocumentCard({ doc }: { doc: Document }) {
   return (
     <Link href={`/reader/${doc.id}`}>
       <div
-        className={`scroll-card ${isProcessing ? "scroll-shimmer" : ""} p-5 cursor-pointer group relative`}
+        className={`doc-card p-5 cursor-pointer group relative ${isProcessing ? "animate-pulse" : ""}`}
       >
-        {/* Type ribbon — pennant hanging from top-right */}
-        <div
-          className={`scroll-ribbon ${RIBBON_BG[doc.type] || RIBBON_BG.other}`}
-        />
-
         {/* Delete controls */}
-        <div className="absolute top-2 right-11 flex items-center gap-1 z-10">
+        <div className="absolute top-2 right-3 flex items-center gap-1 z-10">
           {confirming && (
             <button
               onClick={handleCancelDelete}
-              className="text-xs px-1.5 py-0.5 rounded text-muted-foreground hover:text-foreground"
+              className="text-xs px-1.5 py-0.5 rounded-sm text-muted-foreground hover:text-foreground"
             >
               Cancel
             </button>
           )}
           <button
             onClick={handleDelete}
-            className={`text-xs px-1.5 py-0.5 rounded ${
+            className={`text-xs px-1.5 py-0.5 rounded-sm ${
               confirming
                 ? "bg-destructive text-destructive-foreground"
                 : "text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100"
@@ -72,7 +59,7 @@ export function DocumentCard({ doc }: { doc: Document }) {
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-[1.05rem] text-card-foreground group-hover:text-primary line-clamp-2 mb-1 pr-10 leading-snug">
+        <h3 className="text-[1.05rem] text-card-foreground group-hover:text-primary line-clamp-2 mb-1 pr-10 leading-snug">
           {doc.title}
         </h3>
 
@@ -102,7 +89,7 @@ export function DocumentCard({ doc }: { doc: Document }) {
 
           {doc.processingStatus !== "completed" && (
             <span
-              className={`text-[10px] px-2 py-0.5 rounded-full font-medium tracking-wide uppercase border ${
+              className={`text-[10px] px-2 py-0.5 rounded-sm font-medium tracking-wide uppercase border ${
                 doc.processingStatus === "failed"
                   ? "bg-destructive/10 text-destructive border-destructive/20"
                   : "bg-accent/10 text-accent border-accent/20"

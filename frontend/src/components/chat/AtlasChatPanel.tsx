@@ -45,7 +45,7 @@ export function AtlasChatPanel() {
           <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
           <path d="M2 12h20" />
         </svg>
-        <span className="font-serif text-sm font-medium text-foreground">
+        <span className="text-sm font-medium text-foreground">
           Atlas
         </span>
         <span

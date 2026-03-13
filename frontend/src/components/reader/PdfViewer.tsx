@@ -71,7 +71,7 @@ const VirtualPage = memo(function VirtualPage({
             renderTextLayer={true}
             renderAnnotationLayer={true}
             onRenderSuccess={onRenderSuccess}
-            className="shadow-[0_4px_32px_rgba(0,0,0,0.3),0_1px_8px_rgba(0,0,0,0.2)]"
+            className="shadow-md"
           />
           <HighlightLayer
             pageElement={pageEl}
@@ -330,13 +330,13 @@ export function PdfViewer({ fileUrl, documentId }: PdfViewerProps) {
         file={fileUrl}
         onLoadSuccess={onDocumentLoadSuccess}
         loading={
-          <div className="text-[#C4B8A8] py-20 font-serif text-lg">
-            Loading manuscript...
+          <div className="text-muted-foreground py-20 text-lg">
+            Loading document...
           </div>
         }
         error={
-          <div className="text-destructive py-20 font-serif">
-            Failed to load manuscript.
+          <div className="text-destructive py-20">
+            Failed to load document.
           </div>
         }
       >

@@ -24,15 +24,15 @@ function EmptyDesk({ onOpenArchive }: { onOpenArchive: () => void }) {
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
         </svg>
       </div>
-      <h3 className="font-serif text-lg text-foreground/60 mb-2">
-        Your scholar&apos;s desk awaits
+      <h3 className="text-lg text-foreground/60 mb-2">
+        No document selected
       </h3>
       <p className="text-sm text-muted-foreground/50 max-w-[260px] mb-6">
-        Open the archive to select a scroll, or drag a PDF onto this surface.
+        Select a document from the sidebar, or drag a PDF onto this surface.
       </p>
       <button
         onClick={onOpenArchive}
-        className="text-xs uppercase tracking-wider font-medium text-primary hover:text-primary/80 border border-primary/30 rounded-lg px-4 py-2 hover:bg-primary/5 transition-colors"
+        className="text-xs uppercase tracking-wider font-medium text-primary hover:text-primary/80 border border-primary/30 rounded-sm px-4 py-2 hover:bg-primary/5 transition-colors"
       >
         Open Archive
       </button>
@@ -43,7 +43,7 @@ function EmptyDesk({ onOpenArchive }: { onOpenArchive: () => void }) {
 function ReaderHeader({ title }: { title: string }) {
   return (
     <div className="bg-toolbar-bg border-b border-border px-4 h-10 flex items-center justify-between shrink-0 rounded-t-[var(--panel-radius)]">
-      <h2 className="font-serif text-sm text-foreground line-clamp-1 min-w-0">
+      <h2 className="text-sm text-foreground line-clamp-1 min-w-0">
         {title}
       </h2>
       <PageControls />
@@ -104,7 +104,7 @@ export function DocumentViewport() {
   if (error) {
     return (
       <div className="workspace-panel-document flex-1 flex items-center justify-center">
-        <p className="text-destructive font-serif text-sm">{error}</p>
+        <p className="text-destructive text-sm">{error}</p>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function DocumentViewport() {
   if (loading || !doc) {
     return (
       <div className="workspace-panel-document flex-1 flex items-center justify-center">
-        <p className="text-muted-foreground font-serif text-sm">Loading document...</p>
+        <p className="text-muted-foreground text-sm">Loading document...</p>
       </div>
     );
   }

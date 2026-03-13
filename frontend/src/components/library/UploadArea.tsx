@@ -37,9 +37,9 @@ export function UploadArea() {
         setDragging(false);
         handleFiles(e.dataTransfer.files);
       }}
-      className={`border border-dashed rounded-lg py-5 px-6 text-center cursor-pointer transition-all ${
+      className={`border border-dashed rounded-sm py-5 px-6 text-center cursor-pointer transition-all ${
         dragging
-          ? "border-accent bg-accent/8 shadow-[inset_0_0_20px_rgba(196,148,58,0.08)]"
+          ? "border-accent bg-accent/8"
           : "border-border/60 hover:border-accent/40 hover:bg-card/50"
       }`}
     >
@@ -53,8 +53,8 @@ export function UploadArea() {
       />
       <label htmlFor="file-upload" className="cursor-pointer flex items-center justify-center gap-3">
         {uploading ? (
-          <p className="text-muted-foreground font-serif text-sm">
-            Archiving scroll<span className="animate-pulse">...</span>
+          <p className="text-muted-foreground text-sm">
+            Uploading document<span className="animate-pulse">...</span>
           </p>
         ) : (
           <>
@@ -73,7 +73,7 @@ export function UploadArea() {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
             <span className="text-sm text-muted-foreground">
-              <span className="font-serif text-secondary dark:text-foreground/70">Place a new scroll</span>
+              <span className="text-foreground/70">Upload a document</span>
               {" "}&mdash; drop a PDF or click to browse
             </span>
           </>

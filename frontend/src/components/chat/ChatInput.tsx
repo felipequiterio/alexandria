@@ -26,7 +26,7 @@ export function ChatInput() {
           <span className="text-accent font-medium shrink-0 text-[10px] uppercase tracking-wider mt-0.5">
             Passage
           </span>
-          <span className="line-clamp-2 text-muted-foreground italic font-serif leading-relaxed">
+          <span className="line-clamp-2 text-muted-foreground italic leading-relaxed">
             &ldquo;{selectedText}&rdquo;
           </span>
           <button
@@ -48,7 +48,7 @@ export function ChatInput() {
             selectedText ? "Ask about this passage..." : "Ask Atlas..."
           }
           disabled={isStreaming}
-          className="flex-1 rounded border border-border/60 bg-input-bg px-3 py-2 text-sm font-serif focus:outline-none focus:ring-1 focus:ring-primary/50 disabled:opacity-40 placeholder:text-muted-foreground/40"
+          className="flex-1 rounded-sm border border-border/60 bg-input-bg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 disabled:opacity-40 placeholder:text-muted-foreground/40"
         />
         <button
           type="submit"

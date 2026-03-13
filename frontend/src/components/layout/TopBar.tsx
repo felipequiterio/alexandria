@@ -59,9 +59,9 @@ export function TopBar({ layoutMode }: { layoutMode: LayoutMode }) {
   const isMobile = layoutMode === "mobile";
 
   return (
-    <header className="relative z-50 col-span-2">
+    <header className="relative z-50 col-span-2 border-b border-border">
       <nav
-        className="bg-toolbar-bg flex items-center justify-between px-3 sm:px-4"
+        className="bg-toolbar-bg backdrop-blur-sm flex items-center justify-between px-3 sm:px-4"
         style={{ height: "var(--topbar-height)" }}
       >
         {/* Left: archive toggle + branding */}
@@ -90,7 +90,7 @@ export function TopBar({ layoutMode }: { layoutMode: LayoutMode }) {
             </svg>
           </button>
 
-          <span className="font-serif text-[1.05rem] tracking-[0.16em] font-medium uppercase text-foreground select-none">
+          <span className="font-sans font-medium text-[1.05rem] tracking-[0.12em] uppercase text-foreground select-none">
             {isMobile ? "A" : "Alexandria"}
           </span>
         </div>
@@ -135,9 +135,6 @@ export function TopBar({ layoutMode }: { layoutMode: LayoutMode }) {
           <ThemeToggle />
         </div>
       </nav>
-
-      {/* Thin frieze accent line */}
-      <div className="h-[1.5px] bg-primary/60" />
     </header>
   );
 }

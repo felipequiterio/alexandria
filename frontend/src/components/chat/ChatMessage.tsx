@@ -13,7 +13,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[82%] rounded-lg px-3.5 py-2.5 text-sm ${
+        className={`max-w-[82%] rounded-sm px-3.5 py-2.5 text-sm ${
           isUser
             ? "bg-primary text-primary-foreground dark:bg-accent/20 dark:text-foreground"
             : "bg-card text-card-foreground border border-border/50"

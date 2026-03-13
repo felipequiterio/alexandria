@@ -36,7 +36,7 @@ export function MessageList() {
               <path d="M2 12h20" />
             </svg>
           </div>
-          <p className="font-serif text-base mb-1.5 text-foreground/60">
+          <p className="text-base mb-1.5 text-foreground/60">
             Atlas awaits your question
           </p>
           <p className="text-xs text-muted-foreground/60">
@@ -58,7 +58,7 @@ export function MessageList() {
       {/* Streaming response */}
       {isStreaming && (
         <div className="flex justify-start">
-          <div className="max-w-[88%] rounded-lg px-3.5 py-2.5 text-sm bg-card border border-border/50">
+          <div className="max-w-[88%] rounded-sm px-3.5 py-2.5 text-sm bg-card border border-border/50">
             {agentActivity.length > 0 && (
               <AgentActivityLog activities={agentActivity} />
             )}
@@ -70,8 +70,8 @@ export function MessageList() {
             ) : (
               <div className="flex items-center gap-2 text-muted-foreground text-xs py-0.5">
                 <span className="inline-block w-2 h-2 rounded-full bg-accent atlas-flame" />
-                <span className="font-serif italic">
-                  Atlas is consulting the scrolls...
+                <span>
+                  Atlas is thinking...
                 </span>
               </div>
             )}

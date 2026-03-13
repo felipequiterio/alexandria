@@ -55,13 +55,13 @@ export function HighlightPanel() {
       <div className="flex-1 overflow-y-auto px-3 py-3">
         {!hasContent ? (
           <div className="text-center mt-12">
-            <p className="text-muted-foreground/50 text-xs font-serif">
-              Select text in the document to illuminate passages.
+            <p className="text-muted-foreground/50 text-xs">
+              Select text in the document to highlight passages.
             </p>
           </div>
         ) : (
           <>
-            {/* ── User highlights ── */}
+            {/* User highlights */}
             {pages.map((pageNum) => (
               <div key={pageNum} className="mb-4">
                 <div className="text-[10px] text-muted-foreground/60 uppercase tracking-wider mb-1.5 font-medium">
@@ -70,12 +70,12 @@ export function HighlightPanel() {
                 {grouped[pageNum].map((h) => (
                   <div
                     key={h.id}
-                    className={`mb-2 p-2.5 rounded text-xs border-l-2 bg-card/80 cursor-pointer hover:bg-card ${
+                    className={`mb-2 p-2.5 rounded-sm text-xs border-l-2 bg-card/80 cursor-pointer hover:bg-card ${
                       BORDER_LEFT[h.color] || BORDER_LEFT.teal
                     }`}
                     onClick={() => setPage(h.pageNumber)}
                   >
-                    <p className="line-clamp-3 text-foreground/80 italic font-serif leading-relaxed">
+                    <p className="line-clamp-3 text-foreground/80 italic leading-relaxed">
                       &ldquo;{h.content}&rdquo;
                     </p>
                     {h.note && (
@@ -113,7 +113,7 @@ export function HighlightPanel() {
               </div>
             ))}
 
-            {/* ── Atlas source passages ── */}
+            {/* Atlas source passages */}
             {sourcePassages.length > 0 && (
               <div className="mt-2">
                 <div className="flex items-center justify-between mb-2">
@@ -135,10 +135,10 @@ export function HighlightPanel() {
                     {sourcesByPage[pageNum].map((src) => (
                       <div
                         key={`src-${src.originalIndex}`}
-                        className="mb-2 p-2.5 rounded text-xs border-l-2 border-l-blue-400/50 bg-blue-500/5 cursor-pointer hover:bg-blue-500/10"
+                        className="mb-2 p-2.5 rounded-sm text-xs border-l-2 border-l-blue-400/50 bg-blue-500/5 cursor-pointer hover:bg-blue-500/10"
                         onClick={() => setPage(pageNum)}
                       >
-                        <p className="line-clamp-4 text-foreground/70 italic font-serif leading-relaxed">
+                        <p className="line-clamp-4 text-foreground/70 italic leading-relaxed">
                           &ldquo;{src.content.slice(0, 200)}
                           {src.content.length > 200 ? "..." : ""}
                           &rdquo;

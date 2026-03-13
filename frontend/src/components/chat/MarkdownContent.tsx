@@ -16,7 +16,7 @@ export function MarkdownContent({ content }: { content: string }) {
   const parts = content.split(/(\[p\.\d+\])/g);
 
   return (
-    <div className="markdown-body font-serif leading-relaxed text-sm">
+    <div className="markdown-body leading-relaxed text-sm">
       {parts.map((part, i) => {
         const match = part.match(/^\[p\.(\d+)\]$/);
         if (match) {
@@ -40,17 +40,17 @@ export function MarkdownContent({ content }: { content: string }) {
 const mdComponents: Components = {
   // Headings
   h1: ({ children }) => (
-    <h1 className="text-lg font-serif font-semibold mt-4 mb-2 first:mt-0">
+    <h1 className="text-lg font-semibold mt-4 mb-2 first:mt-0">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="text-base font-serif font-semibold mt-3 mb-1.5 first:mt-0">
+    <h2 className="text-base font-semibold mt-3 mb-1.5 first:mt-0">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-sm font-serif font-semibold mt-2.5 mb-1 first:mt-0">
+    <h3 className="text-sm font-semibold mt-2.5 mb-1 first:mt-0">
       {children}
     </h3>
   ),
@@ -86,7 +86,7 @@ const mdComponents: Components = {
 
   // Code blocks
   pre: ({ children }) => (
-    <pre className="mb-2 p-3 rounded-md bg-surface-desk/80 text-primary-foreground overflow-x-auto text-[13px] font-mono last:mb-0">
+    <pre className="mb-2 p-3 rounded-sm bg-surface-desk/80 text-primary-foreground overflow-x-auto text-[13px] font-mono last:mb-0">
       {children}
     </pre>
   ),

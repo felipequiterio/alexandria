@@ -39,7 +39,7 @@ export function LibraryToolbar() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search the archive..."
+          placeholder="Search documents..."
           className="w-full rounded border border-border/60 bg-input-bg pl-9 pr-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground/50"
         />
       </div>

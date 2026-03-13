@@ -7,9 +7,9 @@ function ThemeSelector() {
   const { theme, setTheme } = useSettingsStore();
 
   const options = [
-    { value: "light" as const, label: "The Archive", sublabel: "Light" },
-    { value: "dark" as const, label: "The Archive at Night", sublabel: "Dark" },
-    { value: "system" as const, label: "System", sublabel: "Auto" },
+    { value: "light" as const, label: "Light" },
+    { value: "dark" as const, label: "Dark" },
+    { value: "system" as const, label: "System" },
   ];
 
   return (
@@ -18,14 +18,13 @@ function ThemeSelector() {
         <button
           key={opt.value}
           onClick={() => setTheme(opt.value)}
-          className={`flex-1 px-4 py-2.5 rounded-lg border text-center transition-all ${
+          className={`flex-1 px-4 py-2.5 rounded-sm border text-center transition-all ${
             theme === opt.value
               ? "border-primary bg-primary/10 text-primary shadow-[0_0_0_1px_var(--primary)]"
               : "border-border/60 bg-card text-muted-foreground hover:text-foreground hover:border-border"
           }`}
         >
-          <div className="text-sm font-medium">{opt.sublabel}</div>
-          <div className="text-[10px] mt-0.5 opacity-60">{opt.label}</div>
+          <div className="text-sm font-medium">{opt.label}</div>
         </button>
       ))}
     </div>
@@ -59,7 +58,7 @@ export default function SettingsPage() {
   };
 
   const inputClass =
-    "w-full rounded border border-border/60 bg-input-bg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50";
+    "w-full rounded-sm border border-border/60 bg-input-bg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50";
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8">
@@ -72,33 +71,33 @@ export default function SettingsPage() {
         </svg>
         Back to workspace
       </a>
-      <h2 className="text-3xl font-serif text-secondary dark:text-foreground mb-1">
+      <h2 className="text-3xl text-foreground mb-1">
         Settings
       </h2>
       <p className="text-muted-foreground text-sm mb-8">
-        Configure your scholarly environment.
+        Configure your workspace.
       </p>
 
       {loading && (
-        <p className="text-muted-foreground font-serif">Loading settings...</p>
+        <p className="text-muted-foreground">Loading settings...</p>
       )}
       {error && <p className="text-destructive text-sm mb-4">{error}</p>}
 
       <div className="space-y-10">
         {/* Appearance */}
         <section>
-          <h3 className="font-serif text-lg text-foreground mb-1">
+          <h3 className="text-lg text-foreground mb-1">
             Appearance
           </h3>
           <p className="text-xs text-muted-foreground mb-4">
-            Choose your environment.
+            Choose your theme.
           </p>
           <ThemeSelector />
         </section>
 
         {/* AI Models */}
         <section>
-          <h3 className="font-serif text-lg text-foreground mb-1">
+          <h3 className="text-lg text-foreground mb-1">
             AI Models
           </h3>
           <p className="text-xs text-muted-foreground mb-4">
@@ -146,12 +145,12 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3 pt-2">
           <button
             onClick={handleSave}
-            className="px-5 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+            className="px-5 py-2 text-sm rounded-sm bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
           >
             Save Settings
           </button>
           {saved && (
-            <span className="text-sm text-success font-serif animate-[fade-in_0.2s_ease]">
+            <span className="text-sm text-success animate-[fade-in_0.2s_ease]">
               Settings saved.
             </span>
           )}

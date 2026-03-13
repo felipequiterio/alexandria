@@ -22,7 +22,7 @@ function DocumentEntry({ doc }: { doc: Document }) {
   return (
     <button
       onClick={() => openDocument(doc.id)}
-      className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2.5 group transition-colors text-sm ${
+      className={`w-full text-left px-3 py-2 rounded-sm flex items-center gap-2.5 group transition-colors text-sm ${
         isActive
           ? "bg-primary/10 text-foreground"
           : "text-foreground/70 hover:bg-card/60 hover:text-foreground"
@@ -32,7 +32,7 @@ function DocumentEntry({ doc }: { doc: Document }) {
       <span className={`w-2 h-2 rounded-full shrink-0 ${RIBBON_DOT[doc.type] || RIBBON_DOT.other} ${isProcessing ? "animate-pulse" : ""}`} />
 
       {/* Title */}
-      <span className="truncate font-serif text-[0.8rem] leading-tight">
+      <span className="truncate text-[0.8rem] leading-tight">
         {doc.title}
       </span>
 
@@ -69,9 +69,9 @@ function UploadTrigger() {
       />
       <button
         onClick={() => inputRef.current?.click()}
-        className="w-full text-xs uppercase tracking-wider font-medium text-primary/70 hover:text-primary border border-dashed border-primary/20 hover:border-primary/40 rounded-lg py-2.5 transition-colors hover:bg-primary/5"
+        className="w-full text-xs uppercase tracking-wider font-medium text-primary/70 hover:text-primary border border-dashed border-primary/20 hover:border-primary/40 rounded-sm py-2.5 transition-colors hover:bg-primary/5"
       >
-        + Add Scroll
+        + Add Document
       </button>
     </div>
   );
@@ -95,11 +95,11 @@ export function ArchiveSidebar() {
       {/* Archive header */}
       <div className="p-3 pb-2 shrink-0">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-serif text-sm font-medium text-foreground tracking-wide">
+          <h2 className="text-sm font-medium text-foreground tracking-wide">
             Archive
           </h2>
           <span className="text-[10px] text-muted-foreground tabular-nums">
-            {documents.length} scrolls
+            {documents.length} documents
           </span>
         </div>
 
@@ -108,36 +108,31 @@ export function ArchiveSidebar() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search scrolls..."
-          className="w-full text-xs bg-input-bg border border-border/60 rounded-lg px-3 py-2 placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
+          placeholder="Search..."
+          className="w-full text-xs bg-input-bg border border-border/60 rounded-sm px-3 py-2 placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20"
         />
       </div>
 
-      {/* Document list with cabinet aesthetic */}
+      {/* Document list */}
       <div className="flex-1 overflow-y-auto px-2 pb-2">
-        {/* Cabinet frame */}
-        <div className="cabinet min-h-full">
-          {/* Teal frieze band */}
-          <div className="cabinet-frieze">
-            <span className="text-[10px] text-primary-foreground/90 dark:text-accent uppercase tracking-[0.14em] font-medium">
-              All Documents
-            </span>
-          </div>
+        <div className="py-2 px-1 mb-1">
+          <span className="text-[10px] text-muted-foreground uppercase tracking-[0.14em] font-medium">
+            All Documents
+          </span>
+        </div>
 
-          {/* Cabinet interior — document entries */}
-          <div className="cabinet-interior space-y-0.5">
-            {filteredDocs.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-xs text-muted-foreground/40 font-serif italic">
-                  {searchQuery ? "No scrolls match your search." : "Your archive awaits its first scroll."}
-                </p>
-              </div>
-            ) : (
-              filteredDocs.map((doc) => (
-                <DocumentEntry key={doc.id} doc={doc} />
-              ))
-            )}
-          </div>
+        <div className="space-y-0.5">
+          {filteredDocs.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-xs text-muted-foreground/40">
+                {searchQuery ? "No documents match your search." : "Your archive awaits its first document."}
+              </p>
+            </div>
+          ) : (
+            filteredDocs.map((doc) => (
+              <DocumentEntry key={doc.id} doc={doc} />
+            ))
+          )}
         </div>
       </div>
 

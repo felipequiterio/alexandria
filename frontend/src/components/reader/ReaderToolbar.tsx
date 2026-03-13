@@ -17,7 +17,7 @@ export function ReaderToolbar({ title }: { title: string }) {
           Library
         </Link>
         <div className="w-px h-3.5 bg-border" />
-        <h2 className="font-serif text-sm text-foreground line-clamp-1 min-w-0">
+        <h2 className="text-sm text-foreground line-clamp-1 min-w-0">
           {title}
         </h2>
       </div>
