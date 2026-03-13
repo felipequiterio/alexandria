@@ -38,7 +38,7 @@ export function AppShell() {
       {/* Desktop: archive as grid column */}
       {isInline && (
         <aside
-          className="overflow-hidden border-r border-border bg-panel-bg"
+          className="overflow-hidden border-r border-border texture-wood-deep"
           aria-hidden={!archiveOpen}
         >
           <ArchiveSidebar />
@@ -57,7 +57,7 @@ export function AppShell() {
           />
           {/* Drawer */}
           <aside
-            className="fixed left-0 bottom-0 z-40 border-r border-border bg-panel-bg shadow-xl animate-[slide-in-left_0.2s_ease]"
+            className="fixed left-0 bottom-0 z-40 border-r border-border texture-wood-deep shadow-2xl animate-[slide-in-left_0.2s_ease]"
             style={{
               top: "var(--topbar-height)",
               width: "min(var(--archive-width), 85vw)",

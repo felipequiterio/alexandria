@@ -41,7 +41,6 @@
   /* Scene asset tokens */
   --frieze-height: 52px;
   --book-border-width: 48px;
-  --book-spine-width: 20px;
   --surface-sandstone: #D4C4A8;
   --surface-parchment: #F2E8D5;
   --frieze-teal: #2D6B6B;
@@ -86,7 +85,6 @@
   /* Scene asset tokens — dark mode */
   --frieze-height: 52px;
   --book-border-width: 48px;
-  --book-spine-width: 20px;
   --surface-sandstone: #1E1814;
   --surface-parchment: #2A2219;
   --frieze-teal: #1A3535;
@@ -323,14 +321,22 @@ a, button, input, select, textarea {
 
 /* Teal frieze band atop the cabinet */
 .cabinet-frieze {
-  background: var(--primary);
-  padding: 0.5rem 1.25rem;
+  background:
+    url("data:image/svg+xml,%3Csvg width='24' height='12' viewBox='0 0 24 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6h6v-6h6v6h6v6h-6v-6h-6v6h-6z' fill='none' stroke='%234A9494' stroke-width='0.5' opacity='0.25'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 40%, rgba(0, 0, 0, 0.1) 100%),
+    var(--primary);
+  background-size: 24px 12px, 100% 100%;
+  padding: 0.5rem 1rem;
   position: relative;
   z-index: 2;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 .dark .cabinet-frieze {
-  background: rgba(196, 148, 58, 0.08);
+  background:
+    url("data:image/svg+xml,%3Csvg width='24' height='12' viewBox='0 0 24 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6h6v-6h6v6h6v6h-6v-6h-6v6h-6z' fill='none' stroke='%232D5555' stroke-width='0.4' opacity='0.2'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(196, 148, 58, 0.04) 0%, transparent 40%, rgba(0, 0, 0, 0.15) 100%),
+    rgba(196, 148, 58, 0.08);
+  background-size: 24px 12px, 100% 100%;
   border-bottom: 1px solid rgba(196, 148, 58, 0.12);
 }
 
@@ -338,7 +344,155 @@ a, button, input, select, textarea {
 .cabinet-interior {
   position: relative;
   z-index: 2;
-  padding: 1.25rem;
+  padding: 0.75rem;
+}
+
+/* =================================================================
+   SCROLL SLOT — compact sidebar entry styled as a parchment card
+   ================================================================= */
+
+.scroll-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid rgba(92, 58, 40, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
+    #8B7A62;
+  box-shadow: inset 0 1px 2px rgba(90, 58, 40, 0.08);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.2s ease, background-color 0.15s ease;
+}
+.dark .scroll-slot {
+  border-color: rgba(139, 106, 80, 0.12);
+  background:
+    linear-gradient(180deg, rgba(196, 148, 58, 0.02) 0%, transparent 60%),
+    #2A2219;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-slot:hover {
+  border-color: rgba(196, 148, 58, 0.2);
+  box-shadow:
+    inset 0 1px 2px rgba(90, 58, 40, 0.06),
+    0 0 6px rgba(196, 148, 58, 0.08);
+}
+.dark .scroll-slot:hover {
+  border-color: rgba(196, 148, 58, 0.25);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    0 0 6px rgba(196, 148, 58, 0.06);
+}
+
+.scroll-slot[data-active="true"] {
+  border-color: rgba(196, 148, 58, 0.35);
+  box-shadow:
+    inset 0 1px 2px rgba(90, 58, 40, 0.06),
+    0 0 8px rgba(196, 148, 58, 0.15),
+    0 0 2px rgba(196, 148, 58, 0.1);
+}
+.dark .scroll-slot[data-active="true"] {
+  border-color: rgba(196, 148, 58, 0.3);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    0 0 8px rgba(196, 148, 58, 0.1),
+    0 0 2px rgba(196, 148, 58, 0.08);
+}
+
+/* Shimmer on processing scroll slots */
+.scroll-slot-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(196, 148, 58, 0.08) 45%,
+    rgba(196, 148, 58, 0.14) 50%,
+    rgba(196, 148, 58, 0.08) 55%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Colored ribbon on left edge */
+.scroll-slot-ribbon {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* =================================================================
+   CABINET DETAILS — cornice, dividers, plaque, header rule
+   ================================================================= */
+
+/* Decorative cornice molding above the cabinet */
+.cabinet-cornice {
+  height: 6px;
+  background: linear-gradient(180deg, var(--secondary), rgba(58, 30, 18, 0.9));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  border-radius: 8px 8px 0 0;
+}
+.dark .cabinet-cornice {
+  background: linear-gradient(180deg, #3A2A1E, #1E1410);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Shelf divider between scroll entries */
+.cabinet-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(92, 58, 40, 0.12), transparent);
+}
+.dark .cabinet-divider {
+  background: linear-gradient(90deg, transparent, rgba(139, 106, 80, 0.1), transparent);
+}
+
+/* Brass plaque badge for scroll count */
+.brass-plaque {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: linear-gradient(180deg, rgba(196, 148, 58, 0.1), rgba(196, 148, 58, 0.05));
+  border: 1px solid rgba(196, 148, 58, 0.2);
+  border-radius: 3px;
+}
+.dark .brass-plaque {
+  background: linear-gradient(180deg, rgba(196, 148, 58, 0.08), rgba(196, 148, 58, 0.03));
+  border-color: rgba(196, 148, 58, 0.15);
+}
+
+/* Decorative rule with centered diamond */
+.archive-header-rule {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 0.5rem 0;
+}
+.archive-header-rule::before {
+  content: "\25C6";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6px;
+  color: var(--border);
+  background: var(--panel-bg);
+  padding: 0 6px;
+  line-height: 1;
 }
 
 /* =================================================================
@@ -428,6 +582,28 @@ a, button, input, select, textarea {
     var(--secondary);
 }
 
+/* Deep wood — darker variant for sidebar/panels */
+.texture-wood-deep {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.05) 0px,
+      transparent 1px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.04) 4px,
+      transparent 5px,
+      transparent 8px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 20%,
+      transparent 80%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+    var(--surface-desk);
+}
+
 /* Parchment — subtle warm cream for book page areas */
 .texture-parchment {
   background:
@@ -513,46 +689,9 @@ a, button, input, select, textarea {
 .book-content {
   flex: 1;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
   display: flex;
   flex-direction: column;
-}
-
-.book-spine {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  bottom: 0;
-  z-index: 5;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.12) 20%,
-      rgba(58, 37, 24, 0.35) 40%,
-      rgba(42, 31, 22, 0.5) 50%,
-      rgba(58, 37, 24, 0.35) 60%,
-      rgba(0, 0, 0, 0.12) 80%,
-      rgba(0, 0, 0, 0.06) 100%
-    );
-  box-shadow:
-    -2px 0 4px rgba(0, 0, 0, 0.08),
-    2px 0 4px rgba(0, 0, 0, 0.08);
-  opacity: 0.5;
-}
-.dark .book-spine {
-  background:
-    linear-gradient(90deg,
-      rgba(0, 0, 0, 0.1) 0%,
-      rgba(0, 0, 0, 0.2) 20%,
-      rgba(30, 20, 12, 0.5) 40%,
-      rgba(15, 10, 6, 0.7) 50%,
-      rgba(30, 20, 12, 0.5) 60%,
-      rgba(0, 0, 0, 0.2) 80%,
-      rgba(0, 0, 0, 0.1) 100%
-    );
-  opacity: 0.6;
 }
 
 /* =================================================================

@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnBorder } from "@/components/assets/ColumnBorder";
-import { BookSpine } from "@/components/assets/BookSpine";
 import { DocumentViewport } from "@/components/layout/DocumentViewport";
 
 export function BookFrame() {
@@ -10,7 +9,6 @@ export function BookFrame() {
       <ColumnBorder side="left" />
       <div className="book-content">
         <DocumentViewport />
-        <BookSpine />
       </div>
       <ColumnBorder side="right" />
     </div>
