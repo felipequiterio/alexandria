@@ -3,6 +3,32 @@
 import { useState, useCallback } from "react";
 import { useChatStore } from "@/stores/chat.store";
 
+const MODES = ["passage", "document", "library"] as const;
+
+function ModeToggle() {
+  const scope = useChatStore((s) => s.scope);
+  const setScope = useChatStore((s) => s.setScope);
+
+  return (
+    <div className="flex items-center gap-1 mb-2">
+      <span className="text-[10px] text-muted-foreground tracking-wide mr-1.5 shrink-0">
+        Mode:
+      </span>
+      {MODES.map((mode) => (
+        <button
+          key={mode}
+          type="button"
+          onClick={() => setScope(mode)}
+          className="bracket-tab-sm"
+          data-active={scope === mode}
+        >
+          {mode.charAt(0).toUpperCase() + mode.slice(1)}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function ChatInput() {
   const [input, setInput] = useState("");
   const { sendMessage, isStreaming, selectedText } = useChatStore();
@@ -39,13 +65,19 @@ export function ChatInput() {
         </div>
       )}
 
+      {/* Mode toggle */}
+      <ModeToggle />
+
+      {/* Input row */}
       <div className="flex gap-2">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={
-            selectedText ? "Ask about this passage..." : "Ask Atlas..."
+            selectedText
+              ? "Consult Atlas regarding this passage..."
+              : "Consult Atlas regarding..."
           }
           disabled={isStreaming}
           className="flex-1 rounded border border-border/60 bg-input-bg px-3 py-2 text-sm font-serif focus:outline-none focus:ring-1 focus:ring-primary/50 disabled:opacity-40 placeholder:text-muted-foreground/40"

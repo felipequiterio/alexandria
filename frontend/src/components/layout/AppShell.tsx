@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { TopBar } from "./TopBar";
 import { ArchiveSidebar } from "./ArchiveSidebar";
 import { CenteredWorkspace } from "./CenteredWorkspace";
+import { ObservatoryPreview } from "@/components/observatory/ObservatoryPreview";
+import { StatusBar } from "@/components/observatory/StatusBar";
 import { useWorkspaceStore } from "@/stores/workspace.store";
 import { useLayoutMode } from "@/hooks/useLayoutMode";
 
@@ -23,7 +25,7 @@ export function AppShell() {
 
   return (
     <div
-      className="h-screen grid grid-rows-[auto_1fr] overflow-hidden transition-[grid-template-columns] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+      className="h-screen grid grid-rows-[auto_1fr_auto_auto] overflow-hidden transition-[grid-template-columns] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
       style={{
         gridTemplateColumns: isInline && archiveOpen
           ? "var(--archive-width) 1fr"
@@ -66,10 +68,16 @@ export function AppShell() {
         </>
       )}
 
-      {/* Workspace frame */}
-      <div className={`overflow-hidden flex ${isInline ? "" : "col-span-2"}`}>
+      {/* Workspace frame — sandstone desk surface */}
+      <div className={`overflow-hidden flex texture-sandstone ${isInline ? "" : "col-span-2"}`}>
         <CenteredWorkspace layoutMode={layoutMode} />
       </div>
+
+      {/* Observatory preview — collapsible constellation panel */}
+      <ObservatoryPreview />
+
+      {/* Status bar — game-style stats */}
+      <StatusBar />
     </div>
   );
 }

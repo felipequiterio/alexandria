@@ -37,6 +37,17 @@
   --workspace-max-width: 1480px;
   --panel-gap: 10px;
   --panel-radius: 12px;
+
+  /* Scene asset tokens */
+  --frieze-height: 52px;
+  --book-border-width: 48px;
+  --book-spine-width: 20px;
+  --surface-sandstone: #D4C4A8;
+  --surface-parchment: #F2E8D5;
+  --frieze-teal: #2D6B6B;
+  --frieze-teal-light: #4A9494;
+  --observatory-bg: #0D1B2A;
+  --star-gold: #D4A843;
 }
 
 /* --- The Archive at Night: Dark Mode --- */
@@ -71,6 +82,17 @@
   --workspace-max-width: 1480px;
   --panel-gap: 10px;
   --panel-radius: 12px;
+
+  /* Scene asset tokens — dark mode */
+  --frieze-height: 52px;
+  --book-border-width: 48px;
+  --book-spine-width: 20px;
+  --surface-sandstone: #1E1814;
+  --surface-parchment: #2A2219;
+  --frieze-teal: #1A3535;
+  --frieze-teal-light: #2D5555;
+  --observatory-bg: #080E18;
+  --star-gold: #D4A843;
 }
 
 @theme inline {
@@ -95,6 +117,12 @@
   --color-input-bg: var(--input-bg);
   --color-toolbar-bg: var(--toolbar-bg);
   --color-reader-bg: var(--reader-bg);
+  --color-surface-sandstone: var(--surface-sandstone);
+  --color-surface-parchment: var(--surface-parchment);
+  --color-frieze-teal: var(--frieze-teal);
+  --color-frieze-teal-light: var(--frieze-teal-light);
+  --color-observatory-bg: var(--observatory-bg);
+  --color-star-gold: var(--star-gold);
   --font-serif: var(--font-eb-garamond);
   --font-sans: var(--font-inter);
   --topbar-height: var(--topbar-height);
@@ -339,6 +367,296 @@ a, button, input, select, textarea {
 }
 
 /* =================================================================
+   SCENE TEXTURES — asset-based background layers
+   ================================================================= */
+
+/* Sandstone desk surface — warm stone with subtle grain */
+.texture-sandstone {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(140, 110, 80, 0.02) 0px,
+      transparent 2px,
+      transparent 8px,
+      rgba(140, 110, 80, 0.02) 10px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(196, 170, 130, 0.08) 0%,
+      transparent 40%,
+      rgba(140, 100, 70, 0.06) 100%
+    ),
+    var(--surface-sandstone);
+}
+.dark .texture-sandstone {
+  background:
+    repeating-linear-gradient(
+      135deg,
+      rgba(139, 106, 80, 0.02) 0px,
+      transparent 2px,
+      transparent 8px,
+      rgba(139, 106, 80, 0.02) 10px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(139, 106, 80, 0.04) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    var(--surface-sandstone);
+}
+
+/* Dark wood grain — for book frame and desk elements */
+.texture-wood-dark {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.04) 0px,
+      transparent 1px,
+      transparent 3px,
+      rgba(0, 0, 0, 0.03) 4px,
+      transparent 5px,
+      transparent 8px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      transparent 20%,
+      transparent 80%,
+      rgba(255, 255, 255, 0.03) 100%
+    ),
+    var(--secondary);
+}
+
+/* Parchment — subtle warm cream for book page areas */
+.texture-parchment {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 245, 225, 0.06) 0%,
+      transparent 50%
+    ),
+    var(--surface-parchment);
+}
+.dark .texture-parchment {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(196, 148, 58, 0.02) 0%,
+      transparent 50%
+    ),
+    var(--surface-parchment);
+}
+
+/* Night sky — deep indigo with subtle radial glow */
+.texture-night-sky {
+  background:
+    radial-gradient(
+      ellipse at 50% 30%,
+      rgba(30, 50, 80, 0.3) 0%,
+      transparent 70%
+    ),
+    var(--observatory-bg);
+}
+
+/* Frieze band — teal navigation bar with meander pattern */
+.frieze-band {
+  background:
+    url("data:image/svg+xml,%3Csvg width='24' height='12' viewBox='0 0 24 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6h6v-6h6v6h6v6h-6v-6h-6v6h-6z' fill='none' stroke='%234A9494' stroke-width='0.5' opacity='0.25'/%3E%3C/svg%3E"),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.1) 100%
+    ),
+    var(--frieze-teal);
+  background-size: 24px 12px, 100% 100%;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.2);
+}
+.dark .frieze-band {
+  background:
+    url("data:image/svg+xml,%3Csvg width='24' height='12' viewBox='0 0 24 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6h6v-6h6v6h6v6h-6v-6h-6v6h-6z' fill='none' stroke='%232D5555' stroke-width='0.4' opacity='0.2'/%3E%3C/svg%3E"),
+    linear-gradient(
+      180deg,
+      rgba(196, 148, 58, 0.04) 0%,
+      transparent 40%,
+      rgba(0, 0, 0, 0.15) 100%
+    ),
+    var(--frieze-teal);
+  background-size: 24px 12px, 100% 100%;
+}
+
+/* =================================================================
+   BOOK FRAME — the open-book illusion wrapping the PDF viewer
+   ================================================================= */
+
+.book-frame {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    0 4px 24px rgba(42, 31, 22, 0.25),
+    0 2px 8px rgba(42, 31, 22, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.1);
+}
+.dark .book-frame {
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.book-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-spine {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0.12) 20%,
+      rgba(58, 37, 24, 0.35) 40%,
+      rgba(42, 31, 22, 0.5) 50%,
+      rgba(58, 37, 24, 0.35) 60%,
+      rgba(0, 0, 0, 0.12) 80%,
+      rgba(0, 0, 0, 0.06) 100%
+    );
+  box-shadow:
+    -2px 0 4px rgba(0, 0, 0, 0.08),
+    2px 0 4px rgba(0, 0, 0, 0.08);
+  opacity: 0.5;
+}
+.dark .book-spine {
+  background:
+    linear-gradient(90deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.2) 20%,
+      rgba(30, 20, 12, 0.5) 40%,
+      rgba(15, 10, 6, 0.7) 50%,
+      rgba(30, 20, 12, 0.5) 60%,
+      rgba(0, 0, 0, 0.2) 80%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  opacity: 0.6;
+}
+
+/* =================================================================
+   ORNAMENTAL UTILITIES
+   ================================================================= */
+
+/* Ornate frame — multi-layered carved border effect */
+.ornate-frame {
+  border: 2px solid rgba(92, 58, 40, 0.25);
+  outline: 1px solid rgba(92, 58, 40, 0.08);
+  outline-offset: 3px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(90, 58, 40, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+.dark .ornate-frame {
+  border-color: rgba(139, 106, 80, 0.25);
+  outline-color: rgba(196, 148, 58, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(196, 148, 58, 0.04),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Bracket tab — [THE ARCHIVE] style navigation buttons */
+.bracket-tab {
+  position: relative;
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.55);
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.bracket-tab::before {
+  content: "[";
+  margin-right: 0.3em;
+  opacity: 0.4;
+}
+.bracket-tab::after {
+  content: "]";
+  margin-left: 0.3em;
+  opacity: 0.4;
+}
+.bracket-tab:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+.bracket-tab:hover::before,
+.bracket-tab:hover::after {
+  opacity: 0.6;
+}
+.bracket-tab[data-active="true"] {
+  color: #F5F0E5;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+.bracket-tab[data-active="true"]::before,
+.bracket-tab[data-active="true"]::after {
+  opacity: 0.7;
+}
+.bracket-tab[data-disabled="true"] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Small bracket tab — for use on light/panel backgrounds (e.g., mode toggle) */
+.bracket-tab-sm {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground);
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.bracket-tab-sm:hover {
+  color: var(--foreground);
+  background: var(--card);
+}
+.bracket-tab-sm[data-active="true"] {
+  color: var(--primary);
+  background: var(--card);
+  border-color: var(--border);
+}
+.dark .bracket-tab-sm[data-active="true"] {
+  color: var(--accent);
+}
+
+/* =================================================================
    ATLAS CHAT
    ================================================================= */
 
@@ -384,6 +702,11 @@ a, button, input, select, textarea {
   to { transform: translateX(0); }
 }
 
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
 /* =================================================================
    LAYOUT — AppShell, Archive, Workspace
    ================================================================= */
@@ -420,6 +743,19 @@ a, button, input, select, textarea {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* Observatory preview panel */
+.observatory-preview {
+  background: var(--observatory-bg);
+  border-top: 1px solid rgba(212, 168, 67, 0.1);
+}
+
+/* Status bar at the very bottom */
+.status-bar {
+  background:
+    linear-gradient(180deg, var(--observatory-bg), rgba(0, 0, 0, 0.3));
+  border-top: 1px solid rgba(212, 168, 67, 0.06);
 }
 
 .workspace-panel-document {

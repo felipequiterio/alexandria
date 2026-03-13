@@ -23,37 +23,28 @@ export function SelectionToolbar({
     setSelection(text, { page, start: 0, end: text.length });
   };
 
+  const btnClass =
+    "font-serif text-[0.7rem] uppercase tracking-[0.1em] font-medium px-2.5 py-1.5 text-foreground/70 hover:text-foreground hover:bg-foreground/5 rounded transition-colors whitespace-nowrap";
+
   return (
     <div
-      className="fixed z-50 flex gap-0.5 rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.15),0_0_0_1px_rgba(0,0,0,0.05)] bg-card border border-border/40 p-1"
-      style={{ left: x, top: y - 46 }}
+      className="fixed z-50 flex items-center gap-0.5 rounded-md shadow-[0_4px_20px_rgba(0,0,0,0.18),0_0_0_1px_rgba(92,58,40,0.12)] bg-card border border-border/50 p-0.5"
+      style={{ left: x, top: y - 48 }}
     >
-      <button
-        onClick={handleAskAtlas}
-        className="px-3 py-1.5 text-xs rounded font-medium text-primary hover:bg-primary/10 flex items-center gap-1.5"
-      >
-        <svg
-          width="11"
-          height="11"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-          <path d="M2 12h20" />
-        </svg>
-        Ask Atlas
+      <button onClick={() => {}} className={btnClass} title="Define — coming soon">
+        <span className="opacity-40 mr-0.5">[</span>Define<span className="opacity-40 ml-0.5">]</span>
       </button>
-      <div className="w-px bg-border/40 my-1" />
-      <button
-        onClick={onHighlight}
-        className="px-3 py-1.5 text-xs rounded font-medium text-accent hover:bg-accent/10"
-      >
-        Highlight
+      <div className="w-px h-4 bg-border/40" />
+      <button onClick={() => {}} className={btnClass} title="Find similar — coming soon">
+        <span className="opacity-40 mr-0.5">[</span>Similar<span className="opacity-40 ml-0.5">]</span>
+      </button>
+      <div className="w-px h-4 bg-border/40" />
+      <button onClick={onHighlight} className={`${btnClass} text-accent/80 hover:text-accent`}>
+        <span className="opacity-40 mr-0.5">[</span>Annotate<span className="opacity-40 ml-0.5">]</span>
+      </button>
+      <div className="w-px h-4 bg-border/40" />
+      <button onClick={handleAskAtlas} className={`${btnClass} text-primary/90 hover:text-primary`}>
+        <span className="opacity-40 mr-0.5">[</span>Ask Atlas<span className="opacity-40 ml-0.5">]</span>
       </button>
     </div>
   );

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useWorkspaceStore } from "@/stores/workspace.store";
 import { useSettingsStore } from "@/stores/settings.store";
+import { TempleIcon } from "@/components/assets/TempleIcon";
 import type { LayoutMode } from "@/hooks/useLayoutMode";
 
 function ThemeToggle() {
@@ -22,7 +23,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={cycle}
-      className="p-1.5 rounded text-muted-foreground hover:text-foreground"
+      className="p-1.5 rounded text-white/50 hover:text-white/80"
       title={`Theme: ${theme}`}
     >
       {theme === "dark" ? (
@@ -52,6 +53,15 @@ function ThemeToggle() {
   );
 }
 
+function GearIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  );
+}
+
 export function TopBar({ layoutMode }: { layoutMode: LayoutMode }) {
   const toggleArchive = useWorkspaceStore((s) => s.toggleArchive);
   const archiveOpen = useWorkspaceStore((s) => s.archiveOpen);
@@ -60,84 +70,75 @@ export function TopBar({ layoutMode }: { layoutMode: LayoutMode }) {
 
   return (
     <header className="relative z-50 col-span-2">
-      <nav
-        className="bg-toolbar-bg flex items-center justify-between px-3 sm:px-4"
-        style={{ height: "var(--topbar-height)" }}
+      <div
+        className="frieze-band flex items-center justify-between px-4"
+        style={{ height: "var(--frieze-height)" }}
       >
-        {/* Left: archive toggle + branding */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            onClick={toggleArchive}
-            className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-card/50"
-            aria-expanded={archiveOpen}
-            aria-label={archiveOpen ? "Close archive" : "Open archive"}
-            title={archiveOpen ? "Close archive" : "Open archive"}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              {archiveOpen ? (
-                <>
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <line x1="9" y1="3" x2="9" y2="21" />
-                </>
-              ) : (
-                <>
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <line x1="9" y1="3" x2="9" y2="21" />
-                  <line x1="14" y1="9" x2="19" y2="9" />
-                  <line x1="14" y1="15" x2="19" y2="15" />
-                </>
-              )}
-            </svg>
-          </button>
-
-          <span className="font-serif text-[1.05rem] tracking-[0.16em] font-medium uppercase text-foreground select-none">
+        {/* Left: Temple icon + ALEXANDRIA branding */}
+        <div className="flex items-center gap-3 shrink-0">
+          <TempleIcon size={isMobile ? 22 : 26} className="text-white/70" />
+          <span className="font-serif text-[0.95rem] tracking-[0.2em] font-medium uppercase text-white/85 select-none">
             {isMobile ? "A" : "Alexandria"}
           </span>
         </div>
 
-        {/* Right: Observatory + settings + theme */}
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* Observatory link — icon only on mobile */}
-          <span
-            className="text-muted-foreground/30 cursor-not-allowed flex items-center gap-1.5"
-            title="Observatory — coming soon"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-            </svg>
-            {!isMobile && (
-              <span className="uppercase text-[10px] tracking-[0.12em] font-medium">
-                Observatory
-              </span>
-            )}
-          </span>
+        {/* Center: Navigation bracket tabs */}
+        {!isMobile && (
+          <nav className="flex items-center gap-1">
+            <button
+              className="bracket-tab"
+              data-active={archiveOpen}
+              onClick={toggleArchive}
+            >
+              The Archive
+            </button>
+            <button
+              className="bracket-tab"
+              data-active={!archiveOpen}
+              onClick={() => {
+                if (archiveOpen) toggleArchive();
+              }}
+            >
+              The Scholar&apos;s Desk
+            </button>
+            <button
+              className="bracket-tab"
+              data-disabled="true"
+              title="Observatory — coming soon"
+            >
+              The Observatory
+            </button>
+          </nav>
+        )}
 
-          <div className="w-px h-3.5 bg-border" />
+        {/* Right: settings + theme */}
+        <div className="flex items-center gap-2 shrink-0">
+          {isMobile && (
+            <button
+              onClick={toggleArchive}
+              className="p-1.5 rounded text-white/50 hover:text-white/80"
+              aria-expanded={archiveOpen}
+              aria-label={archiveOpen ? "Close archive" : "Open archive"}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="9" y1="3" x2="9" y2="21" />
+              </svg>
+            </button>
+          )}
 
           <Link
             href="/settings"
-            className="text-muted-foreground hover:text-foreground flex items-center"
+            className="p-1.5 rounded text-white/50 hover:text-white/80 flex items-center"
             title="Settings"
           >
-            {isMobile ? (
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
-            ) : (
-              <span className="uppercase text-[10px] tracking-[0.12em] font-medium">
-                Settings
-              </span>
-            )}
+            <GearIcon />
           </Link>
 
-          <div className="w-px h-3.5 bg-border" />
+          <div className="w-px h-3.5 bg-white/15" />
           <ThemeToggle />
         </div>
-      </nav>
-
-      {/* Thin frieze accent line */}
-      <div className="h-[1.5px] bg-primary/60" />
+      </div>
     </header>
   );
 }

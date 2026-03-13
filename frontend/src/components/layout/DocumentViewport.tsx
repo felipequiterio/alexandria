@@ -95,7 +95,7 @@ export function DocumentViewport() {
 
   if (!selectedDocumentId) {
     return (
-      <div className="workspace-panel-document flex-1">
+      <div className="texture-parchment flex-1">
         <EmptyDesk onOpenArchive={() => setArchiveOpen(true)} />
       </div>
     );
@@ -103,7 +103,7 @@ export function DocumentViewport() {
 
   if (error) {
     return (
-      <div className="workspace-panel-document flex-1 flex items-center justify-center">
+      <div className="texture-parchment flex-1 flex items-center justify-center">
         <p className="text-destructive font-serif text-sm">{error}</p>
       </div>
     );
@@ -111,14 +111,14 @@ export function DocumentViewport() {
 
   if (loading || !doc) {
     return (
-      <div className="workspace-panel-document flex-1 flex items-center justify-center">
+      <div className="texture-parchment flex-1 flex items-center justify-center">
         <p className="text-muted-foreground font-serif text-sm">Loading document...</p>
       </div>
     );
   }
 
   return (
-    <div className="workspace-panel-document flex-1 flex flex-col">
+    <div className="texture-parchment flex-1 flex flex-col">
       <ReaderHeader title={doc.title} />
       <div className="flex-1 overflow-auto">
         <PdfViewer fileUrl={getDocumentFileUrl(doc.id)} documentId={doc.id} />

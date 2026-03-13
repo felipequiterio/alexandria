@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 import { DocumentViewport } from "./DocumentViewport";
+import { BookFrame } from "@/components/reader/BookFrame";
 import { AtlasChatPanel } from "@/components/chat/AtlasChatPanel";
 import { HighlightsRail } from "@/components/reader/HighlightsRail";
 import type { LayoutMode } from "@/hooks/useLayoutMode";
@@ -142,8 +143,15 @@ function DesktopWorkspace() {
   return (
     <div
       ref={containerRef}
-      className="flex-1 flex items-stretch p-4 overflow-hidden"
+      className="flex-1 flex flex-col overflow-hidden"
     >
+      {/* Section title */}
+      <div className="text-center pt-3 pb-2 shrink-0">
+        <h1 className="font-serif text-sm text-foreground/50 tracking-[0.12em] font-medium">
+          The Scholar&apos;s Desk: Reader View
+        </h1>
+      </div>
+    <div className="flex-1 flex items-stretch px-4 pb-4 overflow-hidden">
       {/* Left spacer — centers the workspace block */}
       <div className="flex-1 min-w-0" />
 
@@ -154,7 +162,7 @@ function DesktopWorkspace() {
       >
         <Group orientation="horizontal" id="alexandria-workspace">
           <Panel defaultSize="55%" minSize="35%">
-            <DocumentViewport />
+            <BookFrame />
           </Panel>
           <Separator />
           <Panel defaultSize="45%" minSize="25%">
@@ -195,6 +203,7 @@ function DesktopWorkspace() {
 
       {/* Right spacer — absorbs right-handle growth */}
       <div className="flex-1 min-w-0" />
+    </div>
     </div>
   );
 }
